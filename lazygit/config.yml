@@ -1,5 +1,7 @@
 os:
-  editCommand: 'floaterm'
+  edit: 'nvim {{filename}}'
+
+promptToReturnFromSubprocess: false
 
 gui:
  showIcons: true  
