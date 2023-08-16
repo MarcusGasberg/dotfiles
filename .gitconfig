@@ -12,14 +12,21 @@
     light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 
 [merge]
-	tool = "nvim"
+  tool = vimdiff
+  conflictstyle = diff3
 
 [mergetool]
-	keepBackup = false
-	prompt = false
+  keepBackup = false
+  prompt = false
 
-[mergetool "nvim"]
-	cmd = "nvim -d -c \"wincmd l\" -c \"norm ]c\" \"$LOCAL\" \"$MERGED\" \"$REMOTE\""
+[mergetool "vimdiff"]
+  cmd = "nvim  -d $MERGED $LOCAL $BASE $REMOTE -c 'wincmd J | wincmd ='"
+  
+[user]
+	name = Marcus Gasberg
+	email = guest-maga@systematic.com
+[core]
+	editor = nvim
 
 [diff]
     colorMoved = default

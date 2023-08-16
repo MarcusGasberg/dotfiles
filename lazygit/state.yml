@@ -1,8 +1,12 @@
 lastupdatecheck: 0
 recentrepos:
-- /home/maga/.config/nvim
 - /home/maga/.config
 - /home/maga/source/repos/command-center
+- /home/maga/.config/nvim
 startuppopupversion: 5
-customcommandshistory: []
+customcommandshistory:
+- git reset HEAD~1
+- git config pull.rebase false
+- git merge --abort
+- q
 hidecommandlog: false
