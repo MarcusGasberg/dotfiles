@@ -12,15 +12,15 @@
     light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 
 [merge]
-  tool = vimdiff
+  tool = nvimdiff
   conflictstyle = diff3
 
 [mergetool]
   keepBackup = false
   prompt = false
 
-[mergetool "vimdiff"]
-  cmd = "nvim  -d $MERGED $LOCAL $BASE $REMOTE -c 'wincmd J | wincmd ='"
+[mergetool "nvimdiff"]
+  cmd = nvim -c "DiffviewOpen"
   
 [user]
 	name = Marcus Gasberg
