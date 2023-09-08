@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # If you encounter any error like `declare: -A: invalid option`
 # then you'll have to upgrade bash version to v4.
 # For Mac OS, see http://clubmate.fi/upgrade-to-bash-4-in-mac-os-x/
