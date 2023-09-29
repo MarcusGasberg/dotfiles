@@ -1,5 +1,5 @@
 os:
-  edit: 'nvim {{filename}}'
+  editPreset: 'nvim'
 
 promptToReturnFromSubprocess: false
 
