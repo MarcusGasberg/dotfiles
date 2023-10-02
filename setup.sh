@@ -6,6 +6,7 @@ set -o pipefail
 PACK_DIR=$HOME/packages
 DOT_FILES_DIR=$HOME/.config
 
+apt install build-essential
 
 #######################################################################
 #                            Building Tmux                            #
@@ -41,6 +42,8 @@ then
 	echo "Installing zsh"
 	apt -y install zsh	
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 fi
 
 
@@ -59,18 +62,9 @@ fi
 #######################################################################
 if ! command -v nvim &> /dev/null
 then
-	add-apt-repository ppa:neovim-ppa/stable
+	add-apt-repository ppa:neovim-ppa/unstable
 	apt-get update
 	apt-get install neovim
-fi
-
-#######################################################################
-#                             install zig                             #
-#######################################################################
-if ! command -v zig &> /dev/null
-then
-sudo apt install snapd
-sudo snap install zig --beta --classic
 fi
 
 #######################################################################
@@ -79,8 +73,7 @@ fi
 if  [ ! -d "${HOME}/.nvm/.git" ]
 then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-  export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-  nvm install lts/*
+  bash $HOME/.nvm/nvm.sh install lts/*
 fi
 
 #######################################################################
@@ -116,7 +109,7 @@ fi
 #######################################################################
 if ! command -v rg &> /dev/null
 then
-  cargo install ripgrep 
+  ~/.cargo/bin/cargo install ripgrep 
 fi
 
 
@@ -125,12 +118,13 @@ fi
 #######################################################################
 if ! command -v delta &> /dev/null
 then
-  cargo install git-delta 
+  ~/.cargo/bin/cargo install git-delta 
 fi
 
 
 ln -sf  "$DOT_FILES_DIR/.bash_profile" "$HOME/.bash_profile"
+touch ~/.zshrc
 ln -sf  "$DOT_FILES_DIR/.zshrc" "$HOME/.zshrc"
-ln -sf  "$DOT_FILES_DIR/tmux/tmux.conf" "$HOME/tmux/tmux.conf"
 ln -sf  "$DOT_FILES_DIR/nvim" "$HOME/nvim"
 ln -sf  "$DOT_FILES_DIR/.gitconfig" "$HOME/.gitconfig"
+ln -sf  "$DOT_FILES_DIR/tmux/tmux.conf" "$HOME/tmux/tmux.conf"
