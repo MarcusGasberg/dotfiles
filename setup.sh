@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 set -eux
 set -o pipefail
 
@@ -6,7 +6,7 @@ set -o pipefail
 PACK_DIR=$HOME/packages
 DOT_FILES_DIR=$HOME/.config
 
-apt install build-essential
+sudo apt install build-essential
 
 #######################################################################
 #                            Building Tmux                            #
@@ -15,9 +15,9 @@ if ! command -v tmux &> /dev/null
 then
 
 	echo "Installing tmux"
-	apt install -y libevent
-	apt install -y ncurses
-	apt install -y tmux
+	sudo apt install -y libevent
+	sudo apt install -y ncurses
+	sudo apt install -y tmux
 else
 	echo "tmux is already installed. skipping"
 fi
@@ -29,7 +29,7 @@ fi
 FD_DIR=$HOME/tools/fd
 
 if [[ -z "$(command -v fd)" ]] && [[ ! -f "$FD_DIR/fd" ]]; then
-	 apt -y install fd-find
+	 sudo apt -y install fd-find
 else
     echo "fd is already installed. Skip installing it."
 fi
@@ -40,7 +40,7 @@ fi
 if ! command -v zsh &> /dev/null
 then
 	echo "Installing zsh"
-	apt -y install zsh	
+	sudo apt -y install zsh	
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
 	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
@@ -53,7 +53,7 @@ fi
 #######################################################################
 if ! command -v fzf &> /dev/null
 then
-	apt install fzf
+	sudo apt install fzf
 fi
 
 
@@ -62,9 +62,9 @@ fi
 #######################################################################
 if ! command -v nvim &> /dev/null
 then
-	add-apt-repository ppa:neovim-ppa/unstable
-	apt-get update
-	apt-get install neovim
+	sudo add apt-repository ppa:neovim-ppa/unstable
+	sudo apt-get update
+	sudo apt-get install neovim
 fi
 
 #######################################################################
@@ -72,8 +72,13 @@ fi
 #######################################################################
 if  [ ! -d "${HOME}/.nvm/.git" ]
 then
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-  bash $HOME/.nvm/nvm.sh install lts/*
+  cd $HOME
+  sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  export NVM_DIR="$DOT_FILES_DIR/nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm install node
+  cd $DOT_FILES_DIR
 fi
 
 #######################################################################
@@ -81,8 +86,8 @@ fi
 #######################################################################
 if ! command -v lazygit &> /dev/null
 then
-  mkdir .tmp
-  mkdir /root/.config
+  sudo mkdir .tmp
+  sudo mkdir /root/.config
 
   cd .tmp
   LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
