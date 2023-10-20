@@ -23,6 +23,13 @@ else
 	echo "tmux is already installed. skipping"
 fi
 
+# If wsl
+if [[ $(grep -i Microsoft /proc/version) ]]; then
+  sudo add-apt-repository ppa:wslutilities/wslu
+  sudo apt update
+  sudo apt install wslu
+fi
+
 
 #######################################################################
 #                                 fd                                  #
@@ -44,6 +51,7 @@ then
 	sudo apt -y install zsh	
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 	echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 fi
 
@@ -138,12 +146,13 @@ fi
 
 sudo ln -sf  "$DOT_FILES_DIR/.bash_profile" "$HOME/.bash_profile"
 touch ~/.zshrc
-sudo ln -sf  "$DOT_FILES_DIR/.zshrc" "$HOME/.zshrc"
-sudo ln -sf  "$DOT_FILES_DIR/nvim" "$HOME/nvim"
-sudo ln -sf  "$DOT_FILES_DIR/.gitconfig" "$HOME/.gitconfig"
-sudo ln -sf "$DOT_FILES_DIR/.git-templates" "$HOME/.git-templates"
 if [ ! -d "/root/tmux" ] 
 then
 sudo mkdir /root/tmux
 fi	
 sudo ln -sf  "$DOT_FILES_DIR/tmux/tmux.conf" "$HOME/tmux/tmux.conf"
+sudo ln -sf  "$DOT_FILES_DIR/.zshrc" "$HOME/.zshrc"
+sudo ln -sf  "$DOT_FILES_DIR/nvim" "$HOME/nvim"
+sudo ln -sf  "$DOT_FILES_DIR/.gitconfig" "$HOME/.gitconfig"
+sudo ln -sf "$DOT_FILES_DIR/.git-templates" "$HOME/.git-templates"
+sudo ln -sf  "$DOT_FILES_DIR/.config/nvim/lua/plugins/snippets" "$HOME/snippets"
