@@ -18,6 +18,7 @@ then
 	sudo apt install -y libevent
 	sudo apt install -y ncurses
 	sudo apt install -y tmux
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 else
 	echo "tmux is already installed. skipping"
 fi
@@ -62,7 +63,7 @@ fi
 #######################################################################
 if ! command -v nvim &> /dev/null
 then
-	sudo add apt-repository ppa:neovim-ppa/unstable
+	sudo apt-add-repository ppa:neovim-ppa/unstable
 	sudo apt-get update
 	sudo apt-get install neovim
 fi
@@ -74,7 +75,7 @@ if  [ ! -d "${HOME}/.nvm/.git" ]
 then
   cd $HOME
   sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-  export NVM_DIR="$DOT_FILES_DIR/nvm"
+  export NVM_DIR="$DOT_FILES_DIR/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
   nvm install node
@@ -126,11 +127,23 @@ then
   ~/.cargo/bin/cargo install git-delta 
 fi
 
+#######################################################################
+#                         install asdf                                #
+#######################################################################
+if ! command -v asdf &> /dev/null
+then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+fi
 
-ln -sf  "$DOT_FILES_DIR/.bash_profile" "$HOME/.bash_profile"
+
+sudo ln -sf  "$DOT_FILES_DIR/.bash_profile" "$HOME/.bash_profile"
 touch ~/.zshrc
-ln -sf  "$DOT_FILES_DIR/.zshrc" "$HOME/.zshrc"
-ln -sf  "$DOT_FILES_DIR/nvim" "$HOME/nvim"
-ln -sf  "$DOT_FILES_DIR/.gitconfig" "$HOME/.gitconfig"
-ln -sf  "$DOT_FILES_DIR/tmux/tmux.conf" "$HOME/tmux/tmux.conf"
-ln -sf "$DOT_FILES_DIR/.git-templates" "$HOME/.git-templates"
+sudo ln -sf  "$DOT_FILES_DIR/.zshrc" "$HOME/.zshrc"
+sudo ln -sf  "$DOT_FILES_DIR/nvim" "$HOME/nvim"
+sudo ln -sf  "$DOT_FILES_DIR/.gitconfig" "$HOME/.gitconfig"
+sudo ln -sf "$DOT_FILES_DIR/.git-templates" "$HOME/.git-templates"
+if [ ! -d "/root/tmux" ] 
+then
+sudo mkdir /root/tmux
+fi	
+sudo ln -sf  "$DOT_FILES_DIR/tmux/tmux.conf" "$HOME/tmux/tmux.conf"
