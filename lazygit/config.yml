@@ -4,7 +4,7 @@ os:
 promptToReturnFromSubprocess: false
 
 gui:
- showIcons: true  
+ nerdFontsVersion: "3"
  # use the mocha catpuccin theme
  theme:
    lightTheme: false
