@@ -1,0 +1,35 @@
+import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[shell]
+program = "/bin/zsh"
+args = ["-l"]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+decorations = "None"
+dynamic_padding = true
+opacity = 0.9
+
+[font]
+size = 12.0
+
+[font.bold]
+family = "IosevkaTerm NFM"
+style = "Bold"
+
+[font.bold_italic]
+family = "IosevkaTerm NFM"
+style = "Bold Italic"
+
+[font.italic]
+family = "IosevkaTerm NFM"
+style = "Italic"
+
+[font.normal]
+family = "IosevkaTerm NFM"
+style = "Regular"
+

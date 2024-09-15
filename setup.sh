@@ -6,8 +6,6 @@ set -o pipefail
 PACK_DIR=$HOME/packages
 DOT_FILES_DIR=$HOME/.config
 
-sudo apt install build-essential
-
 #######################################################################
 #                            Building Tmux                            #
 #######################################################################
@@ -15,19 +13,12 @@ if ! command -v tmux &> /dev/null
 then
 
 	echo "Installing tmux"
-	sudo apt install -y libevent
-	sudo apt install -y ncurses
-	sudo apt install -y tmux
+	sudo pacman -Sy libevent
+	sudo pacman -Sy ncurses
+	sudo pacman -Sy tmux
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 else
 	echo "tmux is already installed. skipping"
-fi
-
-# If wsl
-if [[ $(grep -i Microsoft /proc/version) ]]; then
-  sudo add-apt-repository ppa:wslutilities/wslu
-  sudo apt update
-  sudo apt install wslu
 fi
 
 
@@ -37,7 +28,7 @@ fi
 FD_DIR=$HOME/tools/fd
 
 if [[ -z "$(command -v fd)" ]] && [[ ! -f "$FD_DIR/fd" ]]; then
-	 sudo apt -y install fd-find
+	 sudo pacman -Syy fd-find
 else
     echo "fd is already installed. Skip installing it."
 fi
@@ -48,9 +39,13 @@ fi
 if ! command -v zsh &> /dev/null
 then
 	echo "Installing zsh"
-	sudo apt -y install zsh	
+	sudo pacman -Sy zsh	
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+  git clone https://github.com/catppuccin/zsh-syntax-highlighting.git
+  cd zsh-syntax-highlighting/themes/
+  cp -v catppuccin_mocha-zsh-syntax-highlighting.zsh ~/.zsh/
 fi
 
 
@@ -60,7 +55,7 @@ fi
 #######################################################################
 if ! command -v fzf &> /dev/null
 then
-	sudo apt install fzf
+	sudo pacman -Sy fzf
 fi
 
 
@@ -69,9 +64,7 @@ fi
 #######################################################################
 if ! command -v nvim &> /dev/null
 then
-	sudo apt-add-repository ppa:neovim-ppa/unstable
-	sudo apt-get update
-	sudo apt-get install neovim
+	sudo pacman -Sy neovim
 fi
 
 #######################################################################
@@ -140,17 +133,3 @@ if ! command -v asdf &> /dev/null
 then
   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
 fi
-
-
-sudo ln -sf  "$DOT_FILES_DIR/.bash_profile" "$HOME/.bash_profile"
-touch ~/.zshrc
-if [ ! -d "/root/tmux" ] 
-then
-sudo mkdir /root/tmux
-fi	
-sudo ln -sf  "$DOT_FILES_DIR/tmux/tmux.conf" "$HOME/tmux/tmux.conf"
-sudo ln -sf  "$DOT_FILES_DIR/.zshrc" "$HOME/.zshrc"
-sudo ln -sf  "$DOT_FILES_DIR/nvim" "$HOME/nvim"
-sudo ln -sf  "$DOT_FILES_DIR/.gitconfig" "$HOME/.gitconfig"
-sudo ln -sf "$DOT_FILES_DIR/.git-templates" "$HOME/.git-templates"
-sudo ln -sf  "$DOT_FILES_DIR/.config/nvim/lua/plugins/snippets" "$HOME/snippets"

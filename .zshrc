@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-export PATH=/snap/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$HOME/.local/share/nvim/mason/bin:$PATH
+export PATH=$HOME/.config/bin:$HOME/.local/bin:/snap/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$HOME/.local/share/nvim/mason/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -86,7 +86,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(
   git
   z
-  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -144,6 +144,8 @@ export FZF_DEFAULT_OPTS=" \
 --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 . "$HOME/.asdf/asdf.sh"
+
+source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
