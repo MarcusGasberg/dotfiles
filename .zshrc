@@ -11,6 +11,7 @@ export PATH=/snap/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$HOME/.local/sha
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+export TERM=tmux-256color
 export DEFAULT_USER=$USER
 
 export GIT_EDITOR=nvim
