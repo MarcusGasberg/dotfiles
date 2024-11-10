@@ -1,8 +1,5 @@
-import = [
-  "~/.config/alacritty/catppuccin-mocha.toml"
-]
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 args = ["-l"]
 
@@ -32,4 +29,11 @@ style = "Italic"
 [font.normal]
 family = "IosevkaTerm NFM"
 style = "Regular"
+
+[general]
+import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[terminal]
 
