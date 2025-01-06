@@ -11,12 +11,11 @@ export PATH=/snap/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$HOME/.local/sha
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-export TERM=tmux-256color
 export DEFAULT_USER=$USER
 
 export GIT_EDITOR=nvim
 
-export TERM=xterm-256color tmux
+export TERM=screen-256color
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

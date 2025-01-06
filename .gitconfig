@@ -9,9 +9,6 @@
 
 [delta]
     navigate = true    # use n and N to move between diff sections
-    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
-    features = catppuccin-mocha
-
 
 [merge]
     tool = diffview
@@ -29,6 +26,7 @@
 
 [diff]
     colorMoved = default
+
 
 
 [delta "catppuccin-mocha"]
@@ -49,7 +47,7 @@
 	# 25% red 75% base
 	minus-emph-style = bold syntax "#53394c"
 	# 10% red 90% base
-	minus-style = syntax "#34293a"
+	minus-style = syntax "#6f424f"
 	# 25% green 75% base
 	plus-emph-style = bold syntax "#404f4a"
 	# 10% green 90% base
