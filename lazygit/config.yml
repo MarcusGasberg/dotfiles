@@ -1,39 +1,39 @@
 os:
   editPreset: 'nvim'
-
 promptToReturnFromSubprocess: false
-
+customCommands:
+  - key: "C"
+    command: "git cz"
+    description: "commit with commitizen"
+    context: "files"
+    loadingText: "opening commitizen commit tool"
+    output: terminal
 gui:
- nerdFontsVersion: "3"
- # use the mocha catpuccin theme
- theme:
-   lightTheme: false
-   activeBorderColor:
-     - '#89b4fa'
-     - bold
-   inactiveBorderColor:
-     - '#a6adc8'
-   optionsTextColor:
-     - '#89b4fa'
-   selectedLineBgColor:
-     - '#313244'
-   selectedRangeBgColor:
-     - '#313244'
-   cherryPickedCommitBgColor:
-     - '#45475a'
-   cherryPickedCommitFgColor:
-     - '#89b4fa'
-   unstagedChangesColor:
-     - '#f38ba8'
-   defaultFgColor:
-     - '#cdd6f4'
-   searchingActiveBorderColor:
-     - '#f9e2af'
-
-keybinding:
-  universal:
-    return: '<c-\>'
-
+  nerdFontsVersion: "3"
+  # use the mocha catpuccin theme
+  theme:
+    lightTheme: false
+    activeBorderColor:
+      - '#89b4fa'
+      - bold
+    inactiveBorderColor:
+      - '#a6adc8'
+    optionsTextColor:
+      - '#89b4fa'
+    selectedLineBgColor:
+      - '#313244'
+    selectedRangeBgColor:
+      - '#313244'
+    cherryPickedCommitBgColor:
+      - '#45475a'
+    cherryPickedCommitFgColor:
+      - '#89b4fa'
+    unstagedChangesColor:
+      - '#f38ba8'
+    defaultFgColor:
+      - '#cdd6f4'
+    searchingActiveBorderColor:
+      - '#f9e2af'
 git:
   paging:
     colorArg: always
@@ -45,12 +45,7 @@ git:
   skipHookPrefix: WIP
   autoFetch: true
   autoRefresh: true
-  branchLogCmd:
-    git log --graph --color=always --abbrev-commit --decorate --date=relative
-    --pretty=medium {{branchName}} --
-  allBranchesLogCmd:
-    git log --graph --all --color=always --abbrev-commit --decorate
-    --date=relative  --pretty=medium
+  branchLogCmd: git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium {{branchName}} --
   overrideGpg: false
   disableForcePushing: false
   commitPrefixes: {}
@@ -60,6 +55,8 @@ git:
     showGraph: when-maximised
     showWholeGraph: false
   diffContextSize: 3
+  allBranchesLogCmds:
+    - git log --graph --all --color=always --abbrev-commit --decorate --date=relative  --pretty=medium
 update:
   method: prompt
   days: 14
@@ -118,7 +115,7 @@ keybinding:
     scrollDownMain-alt1: J
     scrollUpMain-alt2: <c-u>
     scrollDownMain-alt2: <c-d>
-    executeCustomCommand: ":"
+    executeShellCommand: ":"
     createRebaseOptionsMenu: m
     pushFiles: P
     pullFiles: p

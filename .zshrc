@@ -17,7 +17,6 @@ export GIT_EDITOR=nvim
 
 export TERM=screen-256color
 
-
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -143,3 +142,10 @@ export FZF_DEFAULT_OPTS=" \
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# bun completions
+[ -s "/home/maga/.bun/_bun" ] && source "/home/maga/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
