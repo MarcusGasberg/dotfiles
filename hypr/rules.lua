@@ -1,0 +1,3 @@
+-- Window & workspace rules. Empty for now.
+-- Example:
+-- hl.config({ windowrulev2 = { "float, class:^(pavucontrol)$" } })

@@ -1,8 +1,18 @@
 {
   "position": "top",
-  "modules-left": ["sway/workspaces"],
-  "modules-center": ["custom/spotify"],
-  "modules-right": ["network", "custom/vpn", "pulseaudio", "battery", "clock"],
+  "modules-left": [
+    "sway/workspaces"
+  ],
+  "modules-center": [
+    "custom/spotify"
+  ],
+  "modules-right": [
+    "network",
+    "custom/vpn",
+    "pulseaudio",
+    "battery",
+    "clock"
+  ],
   // Modules configuration
   "sway/workspaces": {
     "disable-scroll": true,
@@ -54,7 +64,13 @@
     "format-plugged": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
     "format-alt": "<span size='13000' foreground='#B1E3AD'>{icon}</span> {time}",
     "format-full": "<span size='13000' foreground='#B1E3AD'> </span>{capacity}%",
-    "format-icons": ["", "", "", "", ""],
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
     "tooltip-format": "{time}"
   },
   "network": {
@@ -75,7 +91,10 @@
       "phone": "",
       "portable": "",
       "car": "",
-      "default": ["", ""]
+      "default": [
+        "",
+        ""
+      ]
     }
   }
 }

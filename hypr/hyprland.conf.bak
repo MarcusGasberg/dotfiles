@@ -22,6 +22,9 @@
 
 # See https://wiki.hyprland.org/Configuring/Monitors/
 monitor=,preferred,auto,1
+monitor=DP-1,1920x1080,auto,1
+monitor=DP-5,1920x1080,auto,1,mirror,eDP-1
+monitor=DP-6,1920x1080,auto,1
 
 
 ###################
@@ -45,8 +48,9 @@ $menu = rofi -show drun
 
 # exec-once = $terminal
 # exec-once = nm-applet &
-# exec-once = waybar & hyprpaper & firefox
-exec-once = hyprpaper
+exec-once = hyprpanel 
+exec-once = hyprpaper 
+# exec-once = hyprpaper
 exec-once = ags
 
 
@@ -95,12 +99,7 @@ decoration {
 
     # Change transparency of focused and unfocused windows
     active_opacity = 1.0
-    inactive_opacity = 0.7
-
-    drop_shadow = true
-    shadow_range = 4
-    shadow_render_power = 3
-    col.shadow = rgba(1a1a1aee)
+    inactive_opacity = 0.85
 
     # https://wiki.hyprland.org/Configuring/Variables/#blur
     blur {
@@ -155,10 +154,10 @@ misc {
 
 # https://wiki.hyprland.org/Configuring/Variables/#input
 input {
-    kb_layout = us
+    kb_layout = us,dk
     kb_variant =
     kb_model =
-    kb_options = caps:swapescape
+    kb_options = caps:swapescape,grp:win_space_toggle
     kb_rules =
 
     follow_mouse = 1
@@ -172,7 +171,6 @@ input {
 
 # https://wiki.hyprland.org/Configuring/Variables/#gestures
 gestures {
-    workspace_swipe = false
 }
 
 # Example per-device config
@@ -264,9 +262,7 @@ bindl=, XF86AudioNext, exec, playerctl next
 bindl=, XF86AudioPrev, exec, playerctl previous
 
 # Lock 
-# Screen locking
-$lockfile = ~/.cache/lockscreen.png
-$lockcommand = grim $lockfile; convert $lockfile -blur 0x4 $lockfile; swaylock --image $lockfile
+bind = $mainMod, L, exec, hyprlock
 
 ##############################
 ### WINDOWS AND WORKSPACES ###
@@ -281,4 +277,4 @@ $lockcommand = grim $lockfile; convert $lockfile -blur 0x4 $lockfile; swaylock -
 # Example windowrule v2
 # windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
 
-windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
+# windowrulev2 = suppressevent maximize, class:.* # You'll probably like this.
