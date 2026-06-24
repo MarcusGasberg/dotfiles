@@ -14,6 +14,7 @@ proj="$(mktemp -d)/my.app"; mkdir -p "$proj"
 run "$proj"
 assert_eq "$(tmx has-session -t=my_app 2>/dev/null && echo yes)" "yes" "session created (dot->underscore)"
 assert_eq "$(tmx list-panes -t my_app:main 2>/dev/null | wc -l | tr -d ' ')" "3" "default layout has 3 panes"
+assert_eq "$(tmx display-message -t my_app:main -p '#{pane_index}')" "1" "focus lands on editor (first) pane"
 
 # --- idempotent: rerun does not duplicate ---
 run "$proj"

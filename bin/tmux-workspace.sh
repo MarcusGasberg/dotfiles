@@ -21,7 +21,7 @@ if ! tmux has-session -t="$session" 2>/dev/null; then
     [[ -n "${cmds[i]:-}" ]] && tmux send-keys -t "$cur_pane" "${cmds[i]}" Enter
   done
   tmux select-layout -t "$session:main" "$layout"
-  tmux select-pane -t "$session:main"
+  tmux select-pane -t "$first_pane"
 fi
 
 if [[ -n "${TMUX:-}" ]]; then
