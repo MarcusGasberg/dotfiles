@@ -9,8 +9,13 @@ layout_file="${2:-$dir/.tmux-workspace.json}"
 session="$(basename "$dir" | tr . _)"
 
 if ! tmux has-session -t="$session" 2>/dev/null; then
-  layout="main-vertical"
-  cmds=("nvim" "claude" "")
+  if [[ -f "$layout_file" ]]; then
+    layout="$(jq -r '.layout // "main-vertical"' "$layout_file")"
+    mapfile -t cmds < <(jq -r '.panes[].cmd' "$layout_file")
+  else
+    layout="main-vertical"
+    cmds=("nvim" "claude" "")
+  fi
 
   tmux new-session -ds "$session" -c "$dir" -n main
   first_pane="$(tmux display-message -t "$session:main" -p '#{pane_id}')"

@@ -21,6 +21,14 @@ run "$proj"
 assert_eq "$(tmx list-sessions 2>/dev/null | wc -l | tr -d ' ')" "1" "idempotent: single session"
 assert_eq "$(tmx list-panes -t my_app:main 2>/dev/null | wc -l | tr -d ' ')" "3" "idempotent: still 3 panes"
 
+# --- per-repo layout file drives panes ---
+proj2="$(mktemp -d)/web"; mkdir -p "$proj2"
+cat > "$proj2/.tmux-workspace.json" <<'JSON'
+{ "layout": "even-horizontal", "panes": [ { "name": "a", "cmd": "cat" }, { "name": "b", "cmd": "cat" } ] }
+JSON
+run "$proj2"
+assert_eq "$(tmx list-panes -t web:main 2>/dev/null | wc -l | tr -d ' ')" "2" "layout file yields 2 panes"
+
 tmx kill-server 2>/dev/null
 rm -rf "$TMUX_TMPDIR"
 exit $fail
