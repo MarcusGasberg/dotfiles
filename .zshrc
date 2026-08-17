@@ -13,6 +13,8 @@ export ZSH="$HOME/.oh-my-zsh"
 
 export DEFAULT_USER=$USER
 
+export EDITOR=nvim
+export VISUAL=nvim
 export GIT_EDITOR=nvim
 
 export TERM=screen-256color
@@ -71,7 +73,6 @@ export TERM=screen-256color
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
-
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -148,4 +149,36 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="$BUN_INSTALL/bin:$PATH:/opt/nvim/"
+
+# maven
+export M2_HOME=/opt/apache-maven-3.9.14
+export PATH=$M2_HOME/bin:$PATH
+
+# pnpm
+export PNPM_HOME="/home/maga/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
+
+# Windows interop PATH. WSL normally appends this via /init, but with
+# systemd=true the session env is built by systemd and it never arrives.
+# Appended, not prepended, so Windows binaries don't shadow Linux ones
+# (notably find.exe over find).
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
+  for _wp in /mnt/c/Windows/System32 /mnt/c/Windows \
+             /mnt/c/Windows/System32/WindowsPowerShell/v1.0; do
+    case ":$PATH:" in
+      *":$_wp:"*) ;;
+      *) [[ -d "$_wp" ]] && PATH="$PATH:$_wp" ;;
+    esac
+  done
+  unset _wp
+  export PATH
+fi
+
+# peon-ping quick controls
+alias peon="bash /home/maga/.claude/hooks/peon-ping/peon.sh"
+[ -f /home/maga/.claude/hooks/peon-ping/completions.bash ] && source /home/maga/.claude/hooks/peon-ping/completions.bash

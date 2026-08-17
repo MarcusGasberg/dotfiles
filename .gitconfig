@@ -23,7 +23,7 @@
     email = maga@systematic.com
 [core]
     editor = nvim
-	fileMode = true
+    fileMode = true
 
 [diff]
     colorMoved = default
@@ -62,3 +62,4 @@
 	syntax-theme = Catppuccin Mocha
 [safe]
 	directory = /home/maga/source/repos/environment
+	directory = /home/maga/source/repos/command-center
