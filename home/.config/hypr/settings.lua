@@ -75,6 +75,40 @@ hl.config({
 })
 
 --------------------------
+------ LAYER RULES -------
+--------------------------
+-- Blur for the mg shell's surfaces.
+--
+-- Quickshell's own BackgroundEffect cannot do this: it needs
+-- ext-background-effect-v1, which Hyprland does not implement, so it is a
+-- silent no-op here. Compositor layer rules are the only route.
+--
+-- The catch: Hyprland blurs the whole RECTANGULAR layer surface, not the
+-- rounded shape painted inside it.
+--   * The bar's surface and its painted rect coincide, so plain blur is
+--     right. xray makes it blur the wallpaper rather than the windows behind,
+--     which reads better for a permanent bar and is cheaper.
+--   * The launcher and notifications are full-screen transparent surfaces
+--     with a small card floating in them, so naive blur would blur the entire
+--     screen. ignore_alpha sits just under the card's base alpha (0.78), so
+--     the transparent regions and the scrim fall below the threshold and stay
+--     unblurred. These numbers are empirical - retune together.
+hl.layer_rule({
+  name = "mg-bar-blur",
+  match = { namespace = "^mg-bar$" },
+  blur = true,
+  xray = true,
+  ignore_alpha = 0.7,
+})
+
+hl.layer_rule({
+  name = "mg-panel-blur",
+  match = { namespace = "^mg-(launcher|notifs)$" },
+  blur = true,
+  ignore_alpha = 0.75,
+})
+
+--------------------------
 -------- Gestures --------
 --------------------------
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })

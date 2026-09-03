@@ -1,0 +1,41 @@
+{
+  "bar": {
+    "workspaceCount": 5,
+    "workspaceOccupiedBg": true,
+    "showTray": true,
+    "trayMaxVisible": 6,
+    "showDate": true,
+    "twentyFourHour": true
+  },
+  "launcher": {
+    "actionPrefix": ">",
+    "calcPrefix": "=",
+    "clipPrefix": ";",
+    "maxShown": 8,
+    "hiddenApps": []
+  },
+  "notifs": {
+    "defaultTimeout": 5000,
+    "lowTimeout": 4000,
+    "criticalTimeout": 0,
+    "maxPopups": 4,
+    "groupWindowMs": 30000,
+    "groupThreshold": 3
+  },
+  "appearance": {
+    "transparency": true,
+    "transparencyBase": 0.78,
+    "transparencyLayers": 0.58,
+    "blur": true,
+    "barXray": true
+  },
+  "apps": {
+    "terminal": ["alacritty"],
+    "explorer": ["nautilus"],
+    "audio": ["pavucontrol"]
+  },
+  "services": {
+    "volumeStep": 5,
+    "brightnessStep": 10
+  }
+}

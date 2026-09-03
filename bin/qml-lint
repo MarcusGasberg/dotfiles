@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# qml-lint - parse + design-discipline checks for the mg shell.
+# Runs without quickshell installed: unresolved Quickshell types are expected
+# and filtered; anything else is a real finding.
+set -uo pipefail
+S="${1:-$HOME/.dotfiles/home/.config/quickshell/mg}"
+QMLLINT=$(command -v qmllint || echo /usr/lib/qt6/bin/qmllint)
+cd "$S" || exit 1
+rc=0
+
+echo "== parse =="
+syn=$("$QMLLINT" $(find . -name '*.qml') 2>&1 | grep -iE '\[syntax\]|Expected token|unexpected token')
+[ -z "$syn" ] && echo "  ok: all $(find . -name '*.qml' | wc -l) files parse" || { echo "$syn"; rc=1; }
+
+echo "== no hardcoded colours =="
+h=$(grep -rnE '#[0-9a-fA-F]{6}' modules/ components/ utils/ 2>/dev/null)
+[ -z "$h" ] && echo "  ok" || { echo "$h"; rc=1; }
+
+echo "== no hardcoded dimensions =="
+d=$(grep -rnE '\b(radius|spacing|padding|margins)\s*:\s*[1-9]' modules/ components/ 2>/dev/null)
+[ -z "$d" ] && echo "  ok" || { echo "$d"; rc=1; }
+
+echo "== no hardcoded fonts =="
+f=$(grep -rnE 'font\.(family|pointSize|pixelSize)\s*:\s*("|[0-9])' modules/ components/ 2>/dev/null)
+[ -z "$f" ] && echo "  ok" || { echo "$f"; rc=1; }
+
+echo "== ComponentBehavior on delegate files =="
+m=""
+for x in $(grep -rl 'delegate\|Repeater' modules/ components/ 2>/dev/null); do
+  grep -q 'pragma ComponentBehavior: Bound' "$x" || m="$m $x"
+done
+[ -z "$m" ] && echo "  ok" || { echo " missing:$m"; rc=1; }
+
+exit $rc
