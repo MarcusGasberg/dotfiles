@@ -94,7 +94,7 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 # export ZSH_ENV_HOME=$HOME
-export XDG_CONFIG_HOME=$HOME/.config/
+export XDG_CONFIG_HOME=$HOME/.config
 
 # If wsl
 if [[ $(grep -i Microsoft /proc/version) ]]; then
@@ -113,6 +113,10 @@ fi
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias fd="fdfind"
+# Generated theme layered over the versioned config. LG_CONFIG_FILE takes a
+# comma-separated list and later files win, so the repo keeps all the real
+# settings and only colours are generated.
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,${XDG_STATE_HOME:-$HOME/.local/state}/theme/lazygit.yml"
 alias lg="lazygit"
 alias cat="bat --theme=\"base16\""
 alias vim="nvim"
@@ -125,14 +129,20 @@ export NVM_DIR="$HOME/.config/nvm"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+# Colours come from the generated file, which fzf re-reads on EVERY
+# invocation - so a running shell picks up a new palette with no restart.
+# Non-colour options stay in the env var, so a missing file degrades to
+# fzf's defaults rather than to broken.
+export FZF_DEFAULT_OPTS_FILE="${XDG_STATE_HOME:-$HOME/.local/state}/theme/fzf.opts"
+export FZF_DEFAULT_OPTS="--height=60% --layout=reverse --border=rounded --info=inline"
 
 . "$HOME/.asdf/asdf.sh"
 
-source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+# Generated highlight styles. New shells only - ZSH_HIGHLIGHT_STYLES is a
+# shell-local array, so open shells keep the old palette until they exit.
+_mg_zsh_hl="${XDG_STATE_HOME:-$HOME/.local/state}/theme/zsh-syntax-highlighting.zsh"
+[[ -r $_mg_zsh_hl ]] && source $_mg_zsh_hl
+unset _mg_zsh_hl
 
 # bun completions
 [ -s "/home/marcusg/.bun/_bun" ] && source "/home/marcusg/.bun/_bun"
@@ -154,4 +164,10 @@ export PATH="/home/marcusg/.pixi/bin:$PATH"
   && source ${XDG_CONFIG_HOME:-$HOME/.config}/zsh/secrets.zsh
 
 
+# Generated config, read fresh on every prompt - so a retheme shows up on
+# the next prompt in every open shell. Falls back to the default config
+# path if the file is absent.
+_mg_star="${XDG_STATE_HOME:-$HOME/.local/state}/theme/starship.toml"
+[[ -r $_mg_star ]] && export STARSHIP_CONFIG="$_mg_star"
+unset _mg_star
 eval "$(starship init zsh)"

@@ -16,7 +16,7 @@ configuration{
     sidebar-mode: true;
 }
 
-@theme "catppuccin"
+@import "/home/marcusg/.local/state/theme/rofi-colors.rasi"
 
 element-text, element-icon , mode-switcher {
     background-color: inherit;

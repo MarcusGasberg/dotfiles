@@ -65,6 +65,10 @@ hl.bind("XF86Search", hl.dsp.exec_cmd(menu), { locked = true })
 -- bind fails SILENTLY. Applies to every script in ~/.config/bin.
 hl.bind(mod .. " + SHIFT + ESCAPE", hl.dsp.exec_cmd(binDir .. "/mg-panic"), { locked = true })
 
+-- theme
+hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd(binDir .. "/wallpaper --random"))
+hl.bind(mod .. " + SHIFT + T", hl.dsp.exec_cmd(binDir .. "/retheme"))
+
 -- media (locked)
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })

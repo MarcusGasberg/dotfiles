@@ -10,6 +10,10 @@ hl.env("HYPRCURSOR_SIZE", cursorSize)
 hl.on("hyprland.start", function()
   hl.exec_cmd("hyprpanel")
   hl.exec_cmd("hyprpaper")
+  -- Re-apply the generated palette once the compositor is up, so a login
+  -- always matches the current wallpaper even if the state predates this boot.
+  -- --apply-only skips the matugen run, keeping it off the login critical path.
+  hl.exec_cmd(binDir .. "/retheme --apply-only")
 end)
 
 --------------------------
@@ -21,8 +25,8 @@ hl.config({
     gaps_out = 20,
     border_size = 2,
     col = {
-      active_border = sky,
-      inactive_border = skyAlpha76,
+      active_border = activeBorder,
+      inactive_border = inactiveBorder,
     },
     resize_on_border = false,
     allow_tearing = false,

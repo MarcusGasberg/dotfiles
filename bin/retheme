@@ -76,13 +76,17 @@ fi
 if command -v hyprctl >/dev/null && hyprctl monitors >/dev/null 2>&1 \
    && [ -r "$STATE/hypr-colors.conf" ]; then
   note "hyprland borders"
-  # `keyword`, not `reload`: applies live and cannot re-fire the
-  # hyprland.start autostart handler.
+  # `hyprctl keyword` does NOT work with Hyprland's native Lua config - it
+  # answers "keyword can't work with non-legacy parsers. Use eval." So drive
+  # it through `eval` with a Lua expression instead. Verified live: the border
+  # changes without a reload, and reload is avoided deliberately because it
+  # would re-fire the hyprland.start autostart handler.
   ab=$(sed -n 's/^active_border=//p'   "$STATE/hypr-colors.conf")
   ib=$(sed -n 's/^inactive_border=//p' "$STATE/hypr-colors.conf")
   bg=$(sed -n 's/^background=//p'      "$STATE/hypr-colors.conf")
-  [ -n "$ab" ] && run hyprctl --batch \
-    "keyword general:col.active_border $ab ; keyword general:col.inactive_border $ib ; keyword misc:background_color $bg"
+  if [ -n "$ab" ] && [ -n "$ib" ]; then
+    run hyprctl eval "hl.config({ general = { col = { active_border = \"$ab\", inactive_border = \"$ib\" } }, misc = { background_color = \"$bg\" } })"
+  fi
 fi
 
 # --------------------------------------------------------------- alacritty ---
@@ -99,6 +103,9 @@ if command -v tmux >/dev/null && [ -r "$STATE/tmux.conf" ]; then
   shopt -s nullglob
   for sock in "/tmp/tmux-$(id -u)"/*; do
     [ -S "$sock" ] || continue
+    # A killed server leaves its socket behind; skip those or every run prints
+    # "no server running on ..." for each one.
+    tmux -S "$sock" has-session >/dev/null 2>&1 || continue
     run tmux -S "$sock" source-file "$STATE/tmux.conf"
     # source-file rewrites status-right, wiping agent-inbox's segment. Its
     # entrypoint is idempotent, so just re-run it.

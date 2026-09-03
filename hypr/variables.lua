@@ -11,6 +11,24 @@ cursorSize = "16"
 -- binds and autostart entries must reference them absolutely.
 binDir = os.getenv("HOME") .. "/.config/bin"
 
--- Catppuccin Mocha palette (subset actually referenced)
-sky = "rgb(89dceb)"
-skyAlpha76 = "rgba(89dceb76)"
+-- Border colours come from the generated theme, so a fresh login matches the
+-- current wallpaper. retheme also applies them live via `hyprctl eval`; this
+-- path only covers config load. Wrapped so a missing file can never error the
+-- config - a fresh clone falls back to the old Catppuccin sky.
+local function themeColours()
+  local state = os.getenv("XDG_STATE_HOME") or (os.getenv("HOME") .. "/.local/state")
+  local f = io.open(state .. "/theme/hypr-colors.conf", "r")
+  if not f then return nil end
+  local t = {}
+  for line in f:lines() do
+    local k, v = line:match("^(%w[%w_]*)=(.+)$")
+    if k then t[k] = v end
+  end
+  f:close()
+  if t.active_border and t.inactive_border then return t end
+  return nil
+end
+
+local c = themeColours()
+activeBorder   = c and c.active_border   or "rgba(89dcebff)"
+inactiveBorder = c and c.inactive_border or "rgba(89dceb76)"
