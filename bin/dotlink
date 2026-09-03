@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# dotlink - deploy this repo's `home/` tree into $HOME as symlinks.
+#
+#   dotlink link   [--dry-run]   create/repair every expected link
+#   dotlink prune  [--dry-run]   remove stray symlinks that point into the repo
+#   dotlink verify                exit 0 iff every expected path resolves correctly
+#
+# Why not GNU stow: the hard job here was removing ~70 hand-made symlinks
+# across three inconsistent layers without breaking the one that mattered.
+# `stow -D` refuses to touch links it did not create, so it aborts on almost
+# every one of them. `prune` below does it in a single verifiable pass, and
+# `verify` is the same code that creates the links, so the expected set cannot
+# drift from reality.
+#
+# Layout contract:
+#   home/<name>          -> ~/<name>
+#   home/.config/<name>  -> ~/.config/<name>
+# Whole-directory links with absolute targets. Absolute rather than relative
+# so a package linked at a different depth cannot break, and so `verify` can
+# compare with a plain readlink -f.
+set -uo pipefail
+
+DOTS="${DOTS:-$HOME/.dotfiles}"
+SRC="$DOTS/home"
+DRY=false
+CMD="${1:-}"
+[[ "${2:-}" == "--dry-run" || "${2:-}" == "-n" ]] && DRY=true
+
+[[ -d "$SRC" ]] || { printf 'dotlink: no deploy tree at %s\n' "$SRC" >&2; exit 1; }
+
+# Emit "<repo path>\t<target path>" for every expected link.
+expected() {
+  local p n
+  for p in "$SRC"/* "$SRC"/.[!.]*; do
+    [[ -e "$p" ]] || continue
+    n=$(basename "$p")
+    [[ "$n" == ".config" ]] && continue
+    printf '%s\t%s\n' "$p" "$HOME/$n"
+  done
+  for p in "$SRC"/.config/* "$SRC"/.config/.[!.]*; do
+    [[ -e "$p" ]] || continue
+    printf '%s\t%s\n' "$p" "$HOME/.config/$(basename "$p")"
+  done
+}
+
+do_link() {
+  local rc=0 want at
+  while IFS=$'\t' read -r want at; do
+    if [[ -L "$at" ]]; then
+      if [[ "$(readlink -f "$at")" == "$(readlink -f "$want")" ]]; then continue; fi
+      $DRY && { printf '  relink %s\n' "$at"; continue; }
+      rm -f "$at"
+    elif [[ -e "$at" ]]; then
+      printf '  CONFLICT (real file, refusing to replace): %s\n' "$at" >&2
+      rc=1; continue
+    fi
+    $DRY && { printf '  link   %s -> %s\n' "$at" "$want"; continue; }
+    mkdir -p "$(dirname "$at")"
+    ln -sfn "$want" "$at"
+    printf '  linked %s\n' "$at"
+  done < <(expected)
+  return $rc
+}
+
+do_prune() {
+  local keep at t n
+  keep=$(expected | cut -f2)
+  # Any symlink at a managed depth that resolves into the repo but is not in
+  # the expected set, plus any broken symlink at those depths.
+  for at in "$HOME"/* "$HOME"/.[!.]* "$HOME"/.config/* "$HOME"/.config/.[!.]*; do
+    [[ -L "$at" ]] || continue
+    grep -qxF "$at" <<<"$keep" && continue
+    t=$(readlink -f "$at" 2>/dev/null || true)
+    n=$(readlink "$at")
+    # Prune when: it dangles, or it points anywhere inside ~/.dotfiles.
+    if [[ -z "$t" || ! -e "$t" ]]; then
+      $DRY && printf '  prune (broken)  %s -> %s\n' "$at" "$n" || { rm -f "$at"; printf '  pruned (broken) %s\n' "$at"; }
+    elif [[ "$t" == "$DOTS"/* || "$n" == *".dotfiles/"* ]]; then
+      $DRY && printf '  prune (stray)   %s -> %s\n' "$at" "$n" || { rm -f "$at"; printf '  pruned (stray)  %s\n' "$at"; }
+    fi
+  done
+}
+
+do_verify() {
+  local rc=0 want at n=0
+  while IFS=$'\t' read -r want at; do
+    n=$((n+1))
+    if [[ ! -L "$at" ]]; then
+      printf '  MISSING    %s\n' "$at"; rc=1
+    elif [[ "$(readlink -f "$at")" != "$(readlink -f "$want")" ]]; then
+      printf '  WRONG      %s -> %s (want %s)\n' "$at" "$(readlink "$at")" "$want"; rc=1
+    elif [[ ! -e "$at" ]]; then
+      printf '  DANGLING   %s\n' "$at"; rc=1
+    fi
+  done < <(expected)
+  # Nothing broken should remain at any managed depth.
+  local broken
+  broken=$(find "$HOME" "$HOME/.config" "$DOTS" -maxdepth 1 -xtype l 2>/dev/null || true)
+  if [[ -n "$broken" ]]; then printf '  BROKEN LINK %s\n' $broken; rc=1; fi
+  [[ $rc -eq 0 ]] && printf '  OK: %d links, 0 broken\n' "$n"
+  return $rc
+}
+
+case "$CMD" in
+  link)   do_link ;;
+  prune)  do_prune ;;
+  verify) do_verify ;;
+  *) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac
