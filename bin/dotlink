@@ -39,7 +39,25 @@ expected() {
   done
   for p in "$SRC"/.config/* "$SRC"/.config/.[!.]*; do
     [[ -e "$p" ]] || continue
-    printf '%s\t%s\n' "$p" "$HOME/.config/$(basename "$p")"
+    n=$(basename "$p")
+    # A package carrying .dotlink-files is linked FILE BY FILE into an existing
+    # real directory, rather than as one directory symlink. Needed where the
+    # app owns the target dir: ~/.config/opencode holds node_modules and
+    # service.json, and ~/.config/git is a real directory too. Replacing
+    # either with a symlink would hide the app's own state.
+    # `-L` guard: home/.config/.claude is a symlink TO opencode inside the
+    # repo, and -f follows symlinks - without this it would inherit
+    # opencode's per-file mode and try to link the repo onto itself.
+    if [[ -d "$p" && ! -L "$p" && -f "$p/.dotlink-files" ]]; then
+      local q
+      for q in "$p"/* "$p"/.[!.]*; do
+        [[ -e "$q" ]] || continue
+        [[ "$(basename "$q")" == ".dotlink-files" ]] && continue
+        printf '%s\t%s\n' "$q" "$HOME/.config/$n/$(basename "$q")"
+      done
+      continue
+    fi
+    printf '%s\t%s\n' "$p" "$HOME/.config/$n"
   done
 }
 

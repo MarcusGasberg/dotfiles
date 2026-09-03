@@ -1,5 +1,7 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/.config/bin:$HOME/.local/bin:/snap/bin:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$HOME/.local/share/nvim/mason/bin:$PATH
+# $HOME/bin removed: it was a layer-C symlink to this repo and is gone now
+# that deployment is a single layer. $HOME/.local/bin was listed twice.
+export PATH=$HOME/.config/bin:$HOME/.local/bin:/snap/bin:/usr/local/bin:$HOME/.local/share/nvim/mason/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
