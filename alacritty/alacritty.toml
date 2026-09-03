@@ -32,7 +32,12 @@ style = "Regular"
 
 [general]
 import = [
-  "~/.config/alacritty/catppuccin-mocha.toml"
+  # Fallback: a complete, always-present scheme. Kept so a fresh clone (or a
+  # failed matugen run) still has sane colours.
+  "~/.config/alacritty/catppuccin-mocha.toml",
+  # Generated from the wallpaper by `retheme`. Imported second, so it wins.
+  # A missing import is not an error in alacritty - verified.
+  "~/.local/state/theme/alacritty.toml"
 ]
 
 [terminal]

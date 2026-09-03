@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# wallpaper [--random] [PATH]  -  set the wallpaper and repaint everything.
+set -euo pipefail
+STATE="${XDG_STATE_HOME:-$HOME/.local/state}/theme"
+WALLS="$HOME/.config/wallpapers"
+die() { printf 'wallpaper: %s\n' "$*" >&2; exit 1; }
+
+case "${1:-}" in
+  --random)
+    img=$(find -L "$WALLS" -type f \
+            \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) \
+          | shuf -n1)
+    [ -n "$img" ] || die "no images in $WALLS"
+    ;;
+  ""|-h|--help)
+    printf 'usage: wallpaper [--random] [PATH]\n'
+    printf 'current: %s\n' "$(readlink -f "$STATE/wallpaper" 2>/dev/null || echo none)"
+    exit 0 ;;
+  *) img="$1" ;;
+esac
+
+img="$(readlink -f "$img")" || die "cannot resolve $1"
+[ -r "$img" ] || die "not readable: $img"
+# Reject non-images early: matugen on a text file yields a useless palette.
+file --mime-type -b "$img" | grep -q '^image/' || die "not an image: $img"
+
+mkdir -p "$STATE"
+ln -sfn "$img" "$STATE/wallpaper"
+exec retheme

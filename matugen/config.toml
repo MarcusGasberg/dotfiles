@@ -1,0 +1,42 @@
+# matugen 4.1.0 - wallpaper -> Material 3 palette for the whole desktop.
+#
+# Verified empirically against the installed binary (4.1.0), not from docs:
+#   * Template refs are {{colors.<role>.<mode>.<format>}} where <mode> is
+#     default|dark|light. `.color` is a JSON key, NOT a template format.
+#   * Valid formats: hex, hex_stripped, hex_alpha, hex_alpha_stripped,
+#     alpha_hex, alpha_hex_stripped, rgb, rgba, hsl, hsla, red, green, blue,
+#     alpha, hue, saturation, lightness.
+#   * Also available: {{mode}}, {{is_dark_mode}}, {{image}},
+#     {{palettes.<primary|secondary|tertiary|neutral|neutral_variant|error>._<tone>.hex}}
+#   * 50 colour roles are emitted.
+#
+# NOTE ON base16: matugen DOES emit a base16 block, and it is UNUSABLE for
+# accent colours. Measured on wallpaper1.png, base08..base0f came back as
+# #424c8e #25325f #0a1837 #020c27 #1c2340 #050b1d #111526 #240f1a - eight
+# shades of dark navy, no red/green/yellow/blue at all. Wiring that into ANSI
+# would make terminal output unreadable. Every ramp here is therefore built
+# from the M3 roles and the tonal palettes; semantic colours are pinned.
+#
+# NOTE ON --prefer: matugen ABORTS when an image yields multiple candidate
+# source colours and no TTY is detected ("Multiple source colors found, no
+# preference was inputted, and a terminal was not detected"). That is exactly
+# the case in a Hyprland keybind or autostart, so `retheme` always passes
+# --prefer. There is no source_color_index option in 4.1.0.
+#
+# No post_hooks anywhere: `retheme` owns every reload, so the sequence is
+# readable in one file and a partial failure cannot fire reloads out of order.
+
+[config]
+version_check = false
+
+[templates.scheme]
+input_path  = '~/.dotfiles/.config/matugen/templates/scheme.json'
+output_path = '~/.local/state/theme/scheme.json'
+
+[templates.colors_debug]
+input_path  = '~/.dotfiles/.config/matugen/templates/colors.txt'
+output_path = '~/.local/state/theme/colors.txt'
+
+[templates.alacritty]
+input_path  = '~/.dotfiles/.config/matugen/templates/alacritty.toml'
+output_path = '~/.local/state/theme/alacritty.toml'
