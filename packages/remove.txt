@@ -1,0 +1,8 @@
+# Installed but unused. wofi duplicates rofi and was never configured.
+wofi
+# waybar: removed in phase 0.3 along with its config, which could not have
+# started anyway (a custom/vpn entry with no definition).
+waybar
+# NOT here on purpose: ags-hyprpanel-git. It is the rollback for the
+# notification handover and costs ~50MB. Remove only after the mg shell has
+# been the daily driver for two weeks.

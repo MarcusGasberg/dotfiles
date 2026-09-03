@@ -1,0 +1,33 @@
+# Official-repo packages. Every name here was verified present in core/extra
+# on this machine's mirrors - see `bin/bootstrap`.
+
+# --- shell / core ---
+zsh git git-delta lazygit starship ripgrep fd fzf bat tmux neovim jq lua
+
+# --- wayland session ---
+hyprland hyprlock hyprpaper hyprshot hyprcursor hypridle
+xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+polkit polkit-gnome
+
+# --- the mg shell ---
+# NOTE: quickshell is in `extra`, NOT the AUR. Do not install quickshell-git:
+# it conflicts with this package and is behind it in practice.
+quickshell
+qt6-base qt6-declarative qt6-wayland qt6-svg qt6-shadertools qt6-imageformats
+qt6-multimedia qt6-quicktimeline
+cliphist wl-clipboard grim slurp swappy
+brightnessctl playerctl ddcutil upower power-profiles-daemon
+networkmanager bluez bluez-utils libqalculate
+
+# --- colour pipeline ---
+imagemagick   # matugen-bin is already installed
+
+# --- fonts ---
+# Family names matter and are not the package names:
+#   ttf-material-symbols-variable -> "Material Symbols Rounded"
+#   ttf-cascadia-code-nerd        -> "CaskaydiaCove Nerd Font"  (NOT "Cascadia Code")
+ttf-material-symbols-variable ttf-cascadia-code-nerd
+noto-fonts noto-fonts-emoji ttf-jetbrains-mono-nerd
+
+# --- misc ---
+nautilus papirus-icon-theme

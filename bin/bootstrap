@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# bootstrap - idempotent, re-runnable provisioning for this machine.
+#
+# Replaces the old setup.sh, which was not worth patching: beyond cloning tpm
+# to the wrong path (~/.tmux/plugins/tpm, while tmux.conf runs
+# ~/.config/tmux/plugins/tpm/tpm) it also ran `sudo mkdir /root/.config` and
+# `sudo rm -rf .tmp` - the origin of the .tmp broken symlinks that existed in
+# all three symlink layers - installed nvm as root via `sudo curl | bash`, and
+# set an NVM_DIR that disagreed with .zshrc.
+set -euo pipefail
+DOTS="${DOTS:-$HOME/.dotfiles/.config}"
+step() { printf '\n\033[1;36m==>\033[0m %s\n' "$*"; }
+
+step "Repo packages"
+mapfile -t pkgs < <(grep -vE '^\s*(#|$)' "$DOTS/packages/pacman.txt")
+sudo pacman -S --needed "${pkgs[@]}"
+
+step "AUR packages"
+if command -v yay >/dev/null; then
+  mapfile -t aur < <(grep -vE '^\s*(#|$)' "$DOTS/packages/aur.txt")
+  ((${#aur[@]})) && yay -S --needed "${aur[@]}"
+else
+  echo "  yay not found - install it, then re-run" >&2
+fi
+
+step "Submodules"
+git -C "$DOTS" submodule update --init --recursive
+
+step "tpm (at the path tmux.conf actually uses)"
+TPM="$HOME/.config/tmux/plugins/tpm"
+[[ -d "$TPM" ]] || git clone --depth 1 https://github.com/tmux-plugins/tpm "$TPM"
+"$TPM/bin/install_plugins" || true
+rm -rf "$HOME/.tmux"   # the old script's wrong-path clone
+
+step "oh-my-zsh + plugins"
+[[ -d ~/.oh-my-zsh ]] || RUNZSH=no KEEP_ZSHRC=yes sh -c \
+  "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+for p in zsh-autosuggestions zsh-syntax-highlighting; do
+  [[ -d "$ZSH_CUSTOM/plugins/$p" ]] || \
+    git clone --depth 1 "https://github.com/zsh-users/$p" "$ZSH_CUSTOM/plugins/$p"
+done
+
+step "Secrets scaffold"
+mkdir -p ~/.config/zsh
+if [[ ! -f "$DOTS/zsh/secrets.zsh" ]]; then
+  cp "$DOTS/zsh/secrets.zsh.example" "$DOTS/zsh/secrets.zsh"
+  chmod 600 "$DOTS/zsh/secrets.zsh"
+  echo "  -> fill in ~/.config/zsh/secrets.zsh"
+fi
+
+step "Generate the initial theme (several configs read its output)"
+"$DOTS/bin/retheme" --wallpaper "$DOTS/wallpapers/wallpaper1.png"
+
+step "Fonts"
+fc-cache -f
+for f in "Material Symbols Rounded" "CaskaydiaCove Nerd Font" "Rubik"; do
+  got=$(fc-match "$f" family 2>/dev/null)
+  printf '  %-28s -> %s\n' "$f" "$got"
+done
+echo "  (a family echoing back its own name = installed; DejaVu/Noto = MISSING)"
+
+step "Done"

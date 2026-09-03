@@ -1,0 +1,3 @@
+# The ONLY AUR package this setup needs. `ttf-rubik` (1 vote, 2019 static
+# build) and `otf-rubik` (orphaned, flagged out-of-date) are the wrong ones.
+ttf-rubik-vf
