@@ -72,3 +72,7 @@ output_path = '~/.local/state/theme/starship.toml'
 [templates.hyprlock]
 input_path  = '~/.dotfiles/.config/matugen/templates/hyprlock-colors.conf'
 output_path = '~/.local/state/theme/hyprlock-colors.conf'
+
+[templates.nvim]
+input_path  = '~/.dotfiles/.config/matugen/templates/nvim-palette.lua'
+output_path = '~/.local/state/theme/nvim-palette.lua'
