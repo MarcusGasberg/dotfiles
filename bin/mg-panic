@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# mg-panic - hard rollback from the `mg` Quickshell shell to HyprPanel.
+#
+# Bound to SUPER+SHIFT+ESCAPE (locked=true, so it works from a lock state).
+# Written and bound BEFORE mg exists, deliberately: the time you need this is
+# the worst possible time to be writing it.
+#
+# Safe to run at any time, including when mg was never started.
+set -uo pipefail
+
+notify() { command -v notify-send >/dev/null && notify-send -a mg-panic "$1" "${2:-}" || printf 'mg-panic: %s %s\n' "$1" "${2:-}"; }
+
+# 1. Stop mg. `qs kill` is the good path: Quickshell releases its D-Bus names
+#    (org.freedesktop.Notifications, org.kde.StatusNotifierWatcher) on clean
+#    exit, so HyprPanel can acquire them.
+if command -v qs >/dev/null; then
+  qs kill -c mg 2>/dev/null || true
+fi
+pkill -f 'qs -c mg' 2>/dev/null || true
+
+# 2. Let D-Bus actually process the ReleaseName before the successor asks for
+#    it. Without this, HyprPanel can start while mg still owns the names, then
+#    ALSO sit in deferred-registration - and nobody serves notifications.
+sleep 0.3
+
+# 3. Bring HyprPanel back, but only if it is not already serving - otherwise
+#    panicking twice leaves two panels stacked on screen. Test D-Bus ownership
+#    rather than pgrep: `pgrep -f hyprpanel-app` also matches any shell whose
+#    command line merely mentions the string.
+panel_up() {
+  local owner
+  owner=$(busctl --user status org.freedesktop.Notifications 2>/dev/null | sed -n 's/^PPID=//p')
+  [ -n "$owner" ] && [ -r "/proc/$owner/cmdline" ] \
+    && tr -d '\0' < "/proc/$owner/cmdline" | grep -q 'hyprpanel'
+}
+
+if panel_up; then
+  notify "HyprPanel already running" "mg stopped; nothing else to do."
+else
+  hyprpanel >/dev/null 2>&1 &
+  disown
+  sleep 1
+  if panel_up; then
+    notify "Rolled back to HyprPanel" "mg stopped, panel restored."
+  else
+    notify "HyprPanel did NOT start" "Run 'hyprpanel' by hand, or pick GNOME at GDM."
+    exit 1
+  fi
+fi

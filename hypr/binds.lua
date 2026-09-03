@@ -55,8 +55,15 @@ hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.4 @DEFAUL
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 10%-"))
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl s +10%"))
 
--- search launcher (locked + repeating per original bindle)
-hl.bind("XF86Search", hl.dsp.exec_cmd("launchpad"), { locked = true, repeating = true })
+-- search launcher (was bound to `launchpad`, which does not exist on this system)
+hl.bind("XF86Search", hl.dsp.exec_cmd(menu), { locked = true })
+
+-- panic: kill the mg shell and bring HyprPanel back. Bound before mg exists,
+-- deliberately, so it is already tested by the time it is needed.
+-- Absolute path deliberately: Hyprland is started by GDM and its PATH is only
+-- /usr/local/bin:/usr/bin, so a bare "mg-panic" resolves to nothing and the
+-- bind fails SILENTLY. Applies to every script in ~/.config/bin.
+hl.bind(mod .. " + SHIFT + ESCAPE", hl.dsp.exec_cmd(binDir .. "/mg-panic"), { locked = true })
 
 -- media (locked)
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })

@@ -3,8 +3,8 @@ configuration{
     lines: 6;
     font: "IosevkaTerm NFM 12";
     show-icons: true;
-    icon-theme: "Oranchelo";
-    terminal: "st";
+    icon-theme: "Papirus";
+    terminal: "alacritty";
     drun-display-format: "{icon} {name}";
     location: 0;
     disable-history: false;
