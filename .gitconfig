@@ -1,32 +1,32 @@
+[user]
+	name = Marcus Gasberg
+	email = mrgasberg@hotmail.com
+
 [init]
 	templatedir = ~/.git-templates
 
 [core]
-    pager = delta
+	pager = delta
+	editor = nvim
+	excludesfile = ~/.config/git/ignore
 
 [interactive]
-    diffFilter = delta --color-only
+	diffFilter = delta --color-only
 
 [delta]
-    navigate = true    # use n and N to move between diff sections
-    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
-
-[merge]
-  tool = nvimdiff
-  conflictstyle = diff3
-
-[mergetool]
-  keepBackup = false
-  prompt = false
-
-[mergetool "nvimdiff"]
-  cmd = nvim -c "DiffviewOpen"
-  
-[user]
-	name = Marcus Gasberg
-	email = guest-maga@systematic.com
-[core]
-	editor = nvim
+	navigate = true
+	light = false
 
 [diff]
-    colorMoved = default
+	colorMoved = default
+
+[merge]
+	tool = nvimdiff
+	conflictstyle = diff3
+
+[mergetool]
+	keepBackup = false
+	prompt = false
+
+[mergetool "nvimdiff"]
+	cmd = nvim -c "DiffviewOpen"

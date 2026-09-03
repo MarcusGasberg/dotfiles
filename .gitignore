@@ -1,8 +1,24 @@
-Session.vim.*
-yarn/**/*
+# --- Secrets -----------------------------------------------------------------
+zsh/secrets.zsh
+
+# --- Tool state / caches (never config) --------------------------------------
 lazygit/state.yml
-bat/themes
-nvm
+github-copilot/
+nvm/
+bat/themes/
+yarn/
+hunk/state.json
+Session.vim.*
+*.bak
+*.bak-*
+
+# --- TPM-managed plugin clones (NOT submodules) ------------------------------
+tmux/plugins/
+
+# --- Vendored third-party skill packs ----------------------------------------
+# Keep our own; ignore the rest so a pack update isn't a 70-dir diff.
+opencode/skills/*
+!opencode/skills/tmux-workspace/
+
+# --- Legacy ------------------------------------------------------------------
 wslu
-lazygit
-github-copilot
