@@ -120,6 +120,9 @@ Singleton {
         readonly property int notifImage: 42
         readonly property int workspaceDot: 8
         readonly property int workspacePill: 22
+        // 1px hairline. A token rather than a literal so the "no magic
+        // dimensions" lint gate needs no exceptions.
+        readonly property int hairline: 1
     }
 
     component Transparency: QtObject {

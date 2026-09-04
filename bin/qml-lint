@@ -17,8 +17,16 @@ h=$(grep -rnE '#[0-9a-fA-F]{6}' modules/ components/ utils/ 2>/dev/null)
 [ -z "$h" ] && echo "  ok" || { echo "$h"; rc=1; }
 
 echo "== no hardcoded dimensions =="
-d=$(grep -rnE '\b(radius|spacing|padding|margins)\s*:\s*[1-9]' modules/ components/ 2>/dev/null)
+# width/height/implicit* included: a literal 18 slipped through when this
+# only checked radius/spacing/padding/margins.
+d=$(grep -rnE '\b(radius|spacing|padding|margins|width|height|implicitWidth|implicitHeight)\s*:\s*[1-9][0-9]*\s*$' modules/ components/ 2>/dev/null)
 [ -z "$d" ] && echo "  ok" || { echo "$d"; rc=1; }
+
+echo "== no width/height on layout-managed items =="
+# Qt calls this undefined behaviour; qmllint flags it as
+# Quick.layout-positioning.
+l=$("$QMLLINT" $(find . -name '*.qml') 2>&1 | grep -c 'layout-positioning')
+[ "$l" -eq 0 ] && echo "  ok" || { "$QMLLINT" $(find . -name '*.qml') 2>&1 | grep -A1 'layout-positioning'; rc=1; }
 
 echo "== no hardcoded fonts =="
 f=$(grep -rnE 'font\.(family|pointSize|pixelSize)\s*:\s*("|[0-9])' modules/ components/ 2>/dev/null)

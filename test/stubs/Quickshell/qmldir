@@ -1,0 +1,3 @@
+module Quickshell
+Singleton 1.0 Singleton.qml
+ShellScreen 1.0 ShellScreen.qml

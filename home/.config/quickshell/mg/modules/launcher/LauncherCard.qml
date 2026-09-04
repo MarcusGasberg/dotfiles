@@ -14,7 +14,7 @@ StyledRect {
     implicitWidth: Tokens.sizes.launcherWidth
     implicitHeight: content.implicitHeight + Tokens.padding.large * 2
 
-    border.width: 1
+    border.width: Tokens.sizes.hairline
     border.color: Colours.palette.outlineVariant
 
     // Reset every time it opens, so it never reopens mid-query.

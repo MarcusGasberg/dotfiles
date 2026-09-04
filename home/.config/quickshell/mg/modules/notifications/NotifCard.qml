@@ -54,7 +54,11 @@ StyledRect {
                 color: Colours.palette.outline
             }
             Item {
-                width: 18; height: 18
+                // implicit*, not width/height: this Item is managed by the
+                // RowLayout above, and setting width/height on a
+                // layout-managed item is undefined behaviour.
+                implicitWidth: Tokens.sizes.trayIcon
+                implicitHeight: Tokens.sizes.trayIcon
                 MaterialIcon {
                     anchors.centerIn: parent
                     text: "close"
