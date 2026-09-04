@@ -26,7 +26,7 @@ Singleton {
 
     readonly property bool light: mode === "light"
     property string mode: "dark"
-    property string source: ""
+    property string schemeSource: ""
     property string wallpaper: ""
 
     readonly property Palette palette: Palette {}
@@ -94,7 +94,7 @@ Singleton {
         root.retries = 0;
 
         root.mode = scheme.mode ?? "dark";
-        root.source = scheme.source ?? "";
+        root.schemeSource = scheme.source ?? "";
         root.wallpaper = scheme.wallpaper ?? "";
 
         const cols = scheme.colours ?? {};
@@ -120,7 +120,15 @@ Singleton {
 
     FileView {
         id: file
-        path: Quickshell.statePath("scheme.json")
+        // NOT Quickshell.statePath(): that resolves under this shell's own
+        // StateDir (~/.local/state/mg), but scheme.json is a CROSS-TOOL
+        // contract written by matugen into ~/.local/state/theme alongside the
+        // alacritty/tmux/nvim outputs. Pointing at statePath() meant the
+        // FileView silently never loaded and the shell ran on the hardcoded
+        // defaults below - invisible, because those defaults happen to be the
+        // palette of the default wallpaper.
+        path: (Quickshell.env("XDG_STATE_HOME") || (Quickshell.env("HOME") + "/.local/state"))
+              + "/theme/scheme.json"
         printErrors: false
         watchChanges: true
         onFileChanged: reload()

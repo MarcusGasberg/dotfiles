@@ -26,6 +26,13 @@ Singleton {
         // retheme calls this as belt-and-braces; Colours already watches the
         // file itself, so a failure here is harmless.
         function reload(): void { Colours.reloadNow(); }
-        function currentSource(): string { return Colours.source; }
+        function currentSource(): string { return Colours.schemeSource; }
+        // Report real palette values so the pipeline can be verified by
+        // data. Looking at a screenshot is not enough: the bar is
+        // translucent, so a wallpaper change alters its apparent colour even
+        // when the palette has not loaded at all.
+        function surface(): string { return String(Colours.palette.surface); }
+        function primary(): string { return String(Colours.palette.primary); }
+        function loaded(): bool { return Colours.schemeSource !== ""; }
     }
 }
