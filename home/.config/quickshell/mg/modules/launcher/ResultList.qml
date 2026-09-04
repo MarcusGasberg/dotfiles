@@ -147,7 +147,7 @@ Column {
                         anchors.centerIn: parent
                         implicitSize: 26
                         visible: modelData.kind === "app"
-                        source: modelData.kind === "app"
+                        source: (modelData.kind === "app" && (modelData.icon ?? "") !== "")
                             ? Quickshell.iconPath(modelData.icon, "application-x-executable") : ""
                         mipmap: true
                     }

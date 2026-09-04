@@ -14,12 +14,24 @@ Item {
     visible: modelData?.status !== Status.Passive
 
     IconImage {
+        id: icon
         anchors.centerIn: parent
         implicitSize: Tokens.sizes.trayIcon
         source: root.modelData?.icon ?? ""
         // Pixmaps often arrive smaller than we draw them; mipmap keeps the
         // downscale from looking gritty.
         mipmap: true
+        visible: status !== Image.Error && source !== ""
+    }
+
+    // Some apps name an icon no installed theme provides. Rather than a
+    // missing-texture placeholder, show the app's initial.
+    StyledText {
+        anchors.centerIn: parent
+        visible: !icon.visible
+        text: (root.modelData?.title ?? root.modelData?.id ?? "?").charAt(0).toUpperCase()
+        color: Colours.palette.on_surface_variant
+        font.pointSize: Tokens.font.size.smaller
     }
 
     StateLayer {

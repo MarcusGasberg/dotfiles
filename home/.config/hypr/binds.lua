@@ -8,7 +8,7 @@ hl.bind(mod .. " + C", hl.dsp.window.close())
 hl.bind(mod .. " + M", hl.dsp.exit())
 hl.bind(mod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mod .. " + R", hl.dsp.exec_cmd(menu))
+hl.bind(mod .. " + R", hl.dsp.exec_cmd(qsIpc .. " call launcher toggle"))
 hl.bind(mod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mod .. " + T", hl.dsp.layout("togglesplit"))
 hl.bind(mod .. " + F", hl.dsp.window.fullscreen())
@@ -56,7 +56,7 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl s 10%-"))
 hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl s +10%"))
 
 -- search launcher (was bound to `launchpad`, which does not exist on this system)
-hl.bind("XF86Search", hl.dsp.exec_cmd(menu), { locked = true })
+hl.bind("XF86Search", hl.dsp.exec_cmd(qsIpc .. " call launcher toggle"), { locked = true })
 
 -- panic: kill the mg shell and bring HyprPanel back. Bound before mg exists,
 -- deliberately, so it is already tested by the time it is needed.
@@ -64,6 +64,14 @@ hl.bind("XF86Search", hl.dsp.exec_cmd(menu), { locked = true })
 -- /usr/local/bin:/usr/bin, so a bare "mg-panic" resolves to nothing and the
 -- bind fails SILENTLY. Applies to every script in ~/.config/bin.
 hl.bind(mod .. " + SHIFT + ESCAPE", hl.dsp.exec_cmd(binDir .. "/mg-panic"), { locked = true })
+
+-- notifications
+hl.bind(mod .. " + SHIFT + N", hl.dsp.exec_cmd(qsIpc .. " call notifs toggleDnd"))
+hl.bind(mod .. " + SHIFT + C", hl.dsp.exec_cmd(qsIpc .. " call notifs clear"))
+
+-- screenshots (were entirely unbound before)
+hl.bind(mod .. " + SHIFT + S", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
+hl.bind("Print", hl.dsp.exec_cmd("grim - | wl-copy"))
 
 -- theme
 hl.bind(mod .. " + SHIFT + W", hl.dsp.exec_cmd(binDir .. "/wallpaper --random"))

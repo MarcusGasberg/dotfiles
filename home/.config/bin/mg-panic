@@ -13,10 +13,15 @@ notify() { command -v notify-send >/dev/null && notify-send -a mg-panic "$1" "${
 # 1. Stop mg. `qs kill` is the good path: Quickshell releases its D-Bus names
 #    (org.freedesktop.Notifications, org.kde.StatusNotifierWatcher) on clean
 #    exit, so HyprPanel can acquire them.
-if command -v qs >/dev/null; then
-  qs kill -c mg 2>/dev/null || true
-fi
-pkill -f 'qs -c mg' 2>/dev/null || true
+# Absolute path first: quickshell is installed to a user prefix, and this
+# script may run from Hyprland's minimal PATH.
+QS="$HOME/.local/bin/qs"
+[ -x "$QS" ] || QS=$(command -v qs 2>/dev/null || true)
+[ -n "$QS" ] && "$QS" kill -c mg 2>/dev/null || true
+# `pkill -x qs` and not `pkill -f 'qs -c mg'`: an -f pattern also matches any
+# shell whose command line merely mentions it - including this script's own
+# invocation. That mistake killed a shell during testing.
+pkill -x qs 2>/dev/null || true
 
 # 2. Let D-Bus actually process the ReleaseName before the successor asks for
 #    it. Without this, HyprPanel can start while mg still owns the names, then

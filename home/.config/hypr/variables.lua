@@ -10,6 +10,9 @@ cursorSize = "16"
 -- Our own scripts live here. Hyprland (GDM-launched) has a minimal PATH, so
 -- binds and autostart entries must reference them absolutely.
 binDir = os.getenv("HOME") .. "/.config/bin"
+-- quickshell is installed to a user prefix (bin/install-user-prefix), which
+-- is not on Hyprland's minimal PATH either.
+qsIpc = os.getenv("HOME") .. "/.local/bin/qs -c mg ipc"
 
 -- Border colours come from the generated theme, so a fresh login matches the
 -- current wallpaper. retheme also applies them live via `hyprctl eval`; this

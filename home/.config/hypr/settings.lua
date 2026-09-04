@@ -8,8 +8,16 @@ hl.env("HYPRCURSOR_SIZE", cursorSize)
 ---- AUTOSTART ----
 -------------------
 hl.on("hyprland.start", function()
-  hl.exec_cmd("hyprpanel")
   hl.exec_cmd("hyprpaper")
+  -- The mg shell. -d detaches, -n refuses to start a second instance.
+  -- Absolute path: Hyprland is GDM-launched with PATH=/usr/local/bin:/usr/bin
+  -- only, and quickshell is installed to a user prefix (~/.local/bin).
+  hl.exec_cmd(os.getenv("HOME") .. "/.local/bin/qs -c mg -d -n")
+  -- Clipboard history, for the launcher's ";" mode.
+  hl.exec_cmd("wl-paste --watch cliphist store")
+  -- ROLLBACK: ags-hyprpanel-git stays installed. To revert, uncomment the
+  -- next line, comment out the qs line above, and `hyprctl reload`.
+  -- hl.exec_cmd("hyprpanel")
   -- Re-apply the generated palette once the compositor is up, so a login
   -- always matches the current wallpaper even if the state predates this boot.
   -- --apply-only skips the matugen run, keeping it off the login critical path.

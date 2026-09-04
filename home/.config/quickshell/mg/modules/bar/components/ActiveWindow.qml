@@ -24,9 +24,12 @@ Item {
         IconImage {
             anchors.centerIn: parent
             implicitSize: Tokens.sizes.trayIcon + 4
-            // Two-arg iconPath: the fallback form cannot produce a
-            // missing-texture placeholder for an unknown app.
-            source: Quickshell.iconPath(root.appId, "application-x-executable")
+            // Guarded: iconPath("") yields "?fallback=..." which cannot
+            // resolve and logs a warning on every focus change. The two-arg
+            // form is still used for real ids so an unknown app degrades to
+            // the generic icon rather than a missing-texture placeholder.
+            source: root.appId === ""
+                ? "" : Quickshell.iconPath(root.appId, "application-x-executable")
             mipmap: true
         }
     }
