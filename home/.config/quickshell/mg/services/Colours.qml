@@ -99,7 +99,7 @@ Singleton {
 
         const cols = scheme.colours ?? {};
         for (const key in cols) {
-            // background -> background; on_surface_variant -> onSurfaceVariant
+            // background -> background; on_surface_variant -> on_surface_variant
             const prop = key.replace(/_([a-z])/g, (m, ch) => ch.toUpperCase());
             if (root.palette.hasOwnProperty(prop))
                 root.palette[prop] = cols[key];
@@ -136,55 +136,55 @@ Singleton {
     // default wallpaper produces, so first paint is never jarring.
     component Palette: QtObject {
         property color background: "#111318"
-        property color onBackground: "#e1e2e8"
+        property color on_background: "#e1e2e8"
         property color surface: "#111318"
-        property color onSurface: "#e1e2e8"
-        property color surfaceVariant: "#43474e"
-        property color onSurfaceVariant: "#c3c6cf"
-        property color surfaceDim: "#111318"
-        property color surfaceBright: "#37393e"
-        property color surfaceContainerLowest: "#0c0e13"
-        property color surfaceContainerLow: "#191c20"
-        property color surfaceContainer: "#1d2024"
-        property color surfaceContainerHigh: "#272a2f"
-        property color surfaceContainerHighest: "#32353a"
-        property color inverseSurface: "#e1e2e8"
-        property color inverseOnSurface: "#2e3035"
+        property color on_surface: "#e1e2e8"
+        property color surface_variant: "#43474e"
+        property color on_surface_variant: "#c3c6cf"
+        property color surface_dim: "#111318"
+        property color surface_bright: "#37393e"
+        property color surface_container_lowest: "#0c0e13"
+        property color surface_container_low: "#191c20"
+        property color surface_container: "#1d2024"
+        property color surface_container_high: "#272a2f"
+        property color surface_container_highest: "#32353a"
+        property color inverse_surface: "#e1e2e8"
+        property color inverse_on_surface: "#2e3035"
         property color primary: "#a4c9fe"
-        property color onPrimary: "#00315c"
-        property color primaryContainer: "#1f4876"
-        property color onPrimaryContainer: "#d3e3ff"
+        property color on_primary: "#00315c"
+        property color primary_container: "#1f4876"
+        property color on_primary_container: "#d3e3ff"
         property color secondary: "#bcc7db"
-        property color onSecondary: "#263141"
-        property color secondaryContainer: "#3c4858"
-        property color onSecondaryContainer: "#d8e3f8"
+        property color on_secondary: "#263141"
+        property color secondary_container: "#3c4858"
+        property color on_secondary_container: "#d8e3f8"
         property color tertiary: "#d9bde3"
-        property color onTertiary: "#3c2947"
-        property color tertiaryContainer: "#543f5e"
-        property color onTertiaryContainer: "#f6d9ff"
+        property color on_tertiary: "#3c2947"
+        property color tertiary_container: "#543f5e"
+        property color on_tertiary_container: "#f6d9ff"
         property color error: "#ffb4ab"
-        property color onError: "#690005"
-        property color errorContainer: "#93000a"
-        property color onErrorContainer: "#ffdad6"
+        property color on_error: "#690005"
+        property color error_container: "#93000a"
+        property color on_error_container: "#ffdad6"
         property color outline: "#8d9199"
-        property color outlineVariant: "#43474e"
+        property color outline_variant: "#43474e"
         property color shadow: "#000000"
         property color scrim: "#000000"
-        property color surfaceTint: "#a4c9fe"
+        property color surface_tint: "#a4c9fe"
     }
 
     // Only roles that are ever PAINTED AS A BACKGROUND need a T variant.
     component TPalette: QtObject {
         readonly property color surface: root.layer(root.palette.surface, 0)
         readonly property color background: root.layer(root.palette.background, 0)
-        readonly property color surfaceContainerLowest: root.layer(root.palette.surfaceContainerLowest, 1)
-        readonly property color surfaceContainerLow: root.layer(root.palette.surfaceContainerLow, 1)
-        readonly property color surfaceContainer: root.layer(root.palette.surfaceContainer, 1)
-        readonly property color surfaceContainerHigh: root.layer(root.palette.surfaceContainerHigh, 2)
-        readonly property color surfaceContainerHighest: root.layer(root.palette.surfaceContainerHighest, 2)
-        readonly property color primaryContainer: root.layer(root.palette.primaryContainer, 1)
-        readonly property color secondaryContainer: root.layer(root.palette.secondaryContainer, 1)
-        readonly property color tertiaryContainer: root.layer(root.palette.tertiaryContainer, 1)
-        readonly property color errorContainer: root.layer(root.palette.errorContainer, 1)
+        readonly property color surface_container_lowest: root.layer(root.palette.surface_container_lowest, 1)
+        readonly property color surface_container_low: root.layer(root.palette.surface_container_low, 1)
+        readonly property color surface_container: root.layer(root.palette.surface_container, 1)
+        readonly property color surface_container_high: root.layer(root.palette.surface_container_high, 2)
+        readonly property color surface_container_highest: root.layer(root.palette.surface_container_highest, 2)
+        readonly property color primary_container: root.layer(root.palette.primary_container, 1)
+        readonly property color secondary_container: root.layer(root.palette.secondary_container, 1)
+        readonly property color tertiary_container: root.layer(root.palette.tertiary_container, 1)
+        readonly property color error_container: root.layer(root.palette.error_container, 1)
     }
 }

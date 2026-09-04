@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import qs.services
+import qs.components
 
 // Fixed vertical bar on the left edge, with a reserved exclusive zone.
 // No auto-hide, no hover-to-expand: windows tile beside it and nothing ever

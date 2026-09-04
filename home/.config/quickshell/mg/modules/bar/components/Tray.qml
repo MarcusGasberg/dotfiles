@@ -3,6 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
 import qs.services
+import qs.components
 
 // Quickshell's own docs are candid that SNI is "roughly conforming to the
 // kde/freedesktop spec (there is no real spec, we just implemented whatever

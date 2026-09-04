@@ -17,7 +17,7 @@ Column {
         font.family: Tokens.font.mono
         font.pointSize: Tokens.font.size.larger
         font.variableAxes: ({ "wght": 600 })
-        color: Colours.palette.onSurface
+        color: Colours.palette.on_surface
     }
     StyledText {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -25,7 +25,7 @@ Column {
         font.family: Tokens.font.mono
         font.pointSize: Tokens.font.size.larger
         font.variableAxes: ({ "wght": 400 })
-        color: Colours.palette.onSurfaceVariant
+        color: Colours.palette.on_surface_variant
     }
 
     Item { width: 1; height: Tokens.spacing.extraSmall; visible: Config.bar.showDate }

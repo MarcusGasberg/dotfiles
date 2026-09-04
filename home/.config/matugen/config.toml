@@ -30,49 +30,49 @@
 version_check = false
 
 [templates.scheme]
-input_path  = '~/.dotfiles/.config/matugen/templates/scheme.json'
+input_path  = '~/.config/matugen/templates/scheme.json'
 output_path = '~/.local/state/theme/scheme.json'
 
 [templates.colors_debug]
-input_path  = '~/.dotfiles/.config/matugen/templates/colors.txt'
+input_path  = '~/.config/matugen/templates/colors.txt'
 output_path = '~/.local/state/theme/colors.txt'
 
 [templates.alacritty]
-input_path  = '~/.dotfiles/.config/matugen/templates/alacritty.toml'
+input_path  = '~/.config/matugen/templates/alacritty.toml'
 output_path = '~/.local/state/theme/alacritty.toml'
 
 [templates.fzf]
-input_path  = '~/.dotfiles/.config/matugen/templates/fzf.opts'
+input_path  = '~/.config/matugen/templates/fzf.opts'
 output_path = '~/.local/state/theme/fzf.opts'
 
 [templates.zsh_syntax]
-input_path  = '~/.dotfiles/.config/matugen/templates/zsh-syntax-highlighting.zsh'
+input_path  = '~/.config/matugen/templates/zsh-syntax-highlighting.zsh'
 output_path = '~/.local/state/theme/zsh-syntax-highlighting.zsh'
 
 [templates.tmux]
-input_path  = '~/.dotfiles/.config/matugen/templates/tmux.conf'
+input_path  = '~/.config/matugen/templates/tmux.conf'
 output_path = '~/.local/state/theme/tmux.conf'
 
 [templates.hypr]
-input_path  = '~/.dotfiles/.config/matugen/templates/hypr-colors.conf'
+input_path  = '~/.config/matugen/templates/hypr-colors.conf'
 output_path = '~/.local/state/theme/hypr-colors.conf'
 
 [templates.rofi]
-input_path  = '~/.dotfiles/.config/matugen/templates/rofi-colors.rasi'
+input_path  = '~/.config/matugen/templates/rofi-colors.rasi'
 output_path = '~/.local/state/theme/rofi-colors.rasi'
 
 [templates.lazygit]
-input_path  = '~/.dotfiles/.config/matugen/templates/lazygit.yml'
+input_path  = '~/.config/matugen/templates/lazygit.yml'
 output_path = '~/.local/state/theme/lazygit.yml'
 
 [templates.starship]
-input_path  = '~/.dotfiles/.config/matugen/templates/starship.toml'
+input_path  = '~/.config/matugen/templates/starship.toml'
 output_path = '~/.local/state/theme/starship.toml'
 
 [templates.hyprlock]
-input_path  = '~/.dotfiles/.config/matugen/templates/hyprlock-colors.conf'
+input_path  = '~/.config/matugen/templates/hyprlock-colors.conf'
 output_path = '~/.local/state/theme/hyprlock-colors.conf'
 
 [templates.nvim]
-input_path  = '~/.dotfiles/.config/matugen/templates/nvim-palette.lua'
+input_path  = '~/.config/matugen/templates/nvim-palette.lua'
 output_path = '~/.local/state/theme/nvim-palette.lua'

@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# install-user-prefix - install quickshell and the three fonts into ~/.local,
+# with NO root access required.
+#
+# Prefer `bin/bootstrap` (pacman) when you have sudo: it is faster and the
+# packages get updated with the system. This exists because none of it
+# actually needs root - fonts are just files, and quickshell is a CMake
+# project that takes a prefix.
+#
+# Verified on this machine: quickshell 0.3.0 builds clean against the system
+# Qt 6.11.1 with CRASH_HANDLER=OFF (which drops the cpptrace dependency) and
+# a locally-installed CLI11.
+set -euo pipefail
+PREFIX="${PREFIX:-$HOME/.local}"
+WORK="${WORK:-$(mktemp -d)}"
+step() { printf '\n\033[1;36m==>\033[0m %s\n' "$*"; }
+
+step "Fonts -> $PREFIX/share/fonts/mg"
+F="$PREFIX/share/fonts/mg"; mkdir -p "$F"
+# Material Symbols Rounded: the 4-axis variable font (FILL, GRAD, opsz, wght)
+# that MaterialIcon.qml drives directly.
+[ -s "$F/MaterialSymbolsRounded.ttf" ] || curl -fsSL -o "$F/MaterialSymbolsRounded.ttf" \
+  'https://github.com/google/material-design-icons/raw/master/variablefont/MaterialSymbolsRounded%5BFILL%2CGRAD%2Copsz%2Cwght%5D.ttf'
+[ -s "$F/Rubik.ttf" ] || curl -fsSL -o "$F/Rubik.ttf" \
+  'https://github.com/google/fonts/raw/main/ofl/rubik/Rubik%5Bwght%5D.ttf'
+[ -s "$F/Rubik-Italic.ttf" ] || curl -fsSL -o "$F/Rubik-Italic.ttf" \
+  'https://github.com/google/fonts/raw/main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf'
+if [ ! -s "$F/CaskaydiaCoveNerdFont-Regular.ttf" ]; then
+  ver=$(curl -fsSL https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest | jq -r .tag_name)
+  curl -fsSL -o "$WORK/cc.zip" \
+    "https://github.com/ryanoasis/nerd-fonts/releases/download/$ver/CascadiaCode.zip"
+  mkdir -p "$WORK/cc" && (cd "$WORK/cc" && (bsdtar -xf ../cc.zip || unzip -q ../cc.zip))
+  # Only the faces actually referenced; the full set is ~50 files.
+  for f in Regular Bold Italic BoldItalic; do
+    cp "$WORK/cc/CaskaydiaCoveNerdFont-$f.ttf" "$F/" 2>/dev/null || true
+    cp "$WORK/cc/CaskaydiaCoveNerdFontMono-$f.ttf" "$F/" 2>/dev/null || true
+  done
+fi
+fc-cache -f >/dev/null
+for fam in "Material Symbols Rounded" "Rubik" "CaskaydiaCove Nerd Font"; do
+  got=$(fc-match "$fam" family | cut -d, -f1)
+  [ "$got" = "$fam" ] && printf '  ok   %s\n' "$fam" || printf '  MISS %s -> %s\n' "$fam" "$got"
+done
+
+step "CLI11 (header-only; quickshell's only missing build dep here)"
+if [ ! -f "$PREFIX/share/cmake/CLI11/CLI11Config.cmake" ]; then
+  git clone -q --depth 1 --branch v2.4.2 https://github.com/CLIUtils/CLI11.git "$WORK/CLI11"
+  cmake -S "$WORK/CLI11" -B "$WORK/CLI11/build" -G Ninja \
+    -DCMAKE_INSTALL_PREFIX="$PREFIX" -DCLI11_BUILD_TESTS=OFF \
+    -DCLI11_BUILD_EXAMPLES=OFF -DCLI11_BUILD_DOCS=OFF >/dev/null
+  cmake --install "$WORK/CLI11/build" >/dev/null
+fi
+echo "  ok"
+
+step "quickshell 0.3.0 -> $PREFIX"
+if [ ! -x "$PREFIX/bin/quickshell" ]; then
+  git clone -q --depth 1 --branch v0.3.0 \
+    https://github.com/quickshell-mirror/quickshell.git "$WORK/quickshell"
+  cmake -S "$WORK/quickshell" -B "$WORK/quickshell/build" -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+    -DCMAKE_PREFIX_PATH="$PREFIX" \
+    -DDISTRIBUTOR="user-local" \
+    -DCRASH_HANDLER=OFF \
+    -DBUILD_TESTING=OFF
+  cmake --build "$WORK/quickshell/build"
+  cmake --install "$WORK/quickshell/build"
+fi
+"$PREFIX/bin/quickshell" --version
+
+step "Done - run: qs -c mg"

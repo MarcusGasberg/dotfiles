@@ -8,7 +8,7 @@
 # all three symlink layers - installed nvm as root via `sudo curl | bash`, and
 # set an NVM_DIR that disagreed with .zshrc.
 set -euo pipefail
-DOTS="${DOTS:-$HOME/.dotfiles/.config}"
+DOTS="${DOTS:-$HOME/.dotfiles}"
 step() { printf '\n\033[1;36m==>\033[0m %s\n' "$*"; }
 
 step "Repo packages"
@@ -43,14 +43,14 @@ done
 
 step "Secrets scaffold"
 mkdir -p ~/.config/zsh
-if [[ ! -f "$DOTS/zsh/secrets.zsh" ]]; then
-  cp "$DOTS/zsh/secrets.zsh.example" "$DOTS/zsh/secrets.zsh"
-  chmod 600 "$DOTS/zsh/secrets.zsh"
+if [[ ! -f "$DOTS/home/.config/zsh/secrets.zsh" ]]; then
+  cp "$DOTS/home/.config/zsh/secrets.zsh.example" "$DOTS/home/.config/zsh/secrets.zsh"
+  chmod 600 "$DOTS/home/.config/zsh/secrets.zsh"
   echo "  -> fill in ~/.config/zsh/secrets.zsh"
 fi
 
 step "Generate the initial theme (several configs read its output)"
-"$DOTS/bin/retheme" --wallpaper "$DOTS/wallpapers/wallpaper1.png"
+"$DOTS/home/.config/bin/retheme" --wallpaper "$DOTS/home/.config/wallpapers/wallpaper1.png"
 
 step "Fonts"
 fc-cache -f

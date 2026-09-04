@@ -52,10 +52,35 @@ fi
 if ! $APPLY_ONLY; then
   note "matugen ($SCHEME_TYPE/$MODE, prefer=$PREFER) <- $(basename "$WALL")"
   # --continue-on-error: one bad template must not block the others.
+  # A marker whose mtime every output must beat. --continue-on-error means a
+  # broken template fails SILENTLY, so existence is not evidence - freshness
+  # is. This check exists because the pipeline once ran "successfully" for a
+  # day against stale outputs after the repo layout changed under it.
+  marker="$STATE/.retheme-stamp"
+  : > "$marker"
+  sleep 0.05
+
   run matugen image "$WALL" -t "$SCHEME_TYPE" -m "$MODE" \
         --prefer "$PREFER" --continue-on-error -q
-  if ! $DRY && [ ! -s "$STATE/scheme.json" ]; then
-    warn "matugen produced no scheme.json - aborting before any reload"; exit 1
+
+  if ! $DRY; then
+    if [ ! -s "$STATE/scheme.json" ]; then
+      warn "matugen produced no scheme.json - aborting before any reload"; exit 1
+    fi
+    stale=""
+    for out in scheme.json colors.txt alacritty.toml starship.toml tmux.conf \
+               fzf.opts zsh-syntax-highlighting.zsh lazygit.yml \
+               hypr-colors.conf hyprlock-colors.conf rofi-colors.rasi \
+               nvim-palette.lua; do
+      if [ ! "$STATE/$out" -nt "$marker" ]; then stale="$stale $out"; fi
+    done
+    rm -f "$marker"
+    if [ -n "$stale" ]; then
+      warn "these outputs did NOT regenerate:$stale"
+      warn "check the template input_path values in ~/.config/matugen/config.toml"
+      warn "(they must use the DEPLOYED path ~/.config/..., never ~/.dotfiles/...)"
+      exit 1
+    fi
   fi
 fi
 

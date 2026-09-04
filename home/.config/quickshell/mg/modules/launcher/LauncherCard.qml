@@ -9,13 +9,13 @@ StyledRect {
     id: root
     signal dismiss
 
-    color: Colours.t.surfaceContainer
+    color: Colours.t.surface_container
     radius: Tokens.rounding.extraLarge
     implicitWidth: Tokens.sizes.launcherWidth
     implicitHeight: content.implicitHeight + Tokens.padding.large * 2
 
     border.width: Tokens.sizes.hairline
-    border.color: Colours.palette.outlineVariant
+    border.color: Colours.palette.outline_variant
 
     // Reset every time it opens, so it never reopens mid-query.
     onVisibleChanged: if (visible) { search.text = ""; results.index = 0; }
@@ -42,11 +42,11 @@ StyledRect {
                 id: search
                 Layout.fillWidth: true
                 focus: true
-                color: Colours.palette.onSurface
+                color: Colours.palette.on_surface
                 font.family: Tokens.font.sans
                 font.pointSize: Tokens.font.size.larger
-                selectionColor: Colours.palette.primaryContainer
-                selectedTextColor: Colours.palette.onPrimaryContainer
+                selectionColor: Colours.palette.primary_container
+                selectedTextColor: Colours.palette.on_primary_container
                 onTextChanged: results.index = 0
 
                 StyledText {

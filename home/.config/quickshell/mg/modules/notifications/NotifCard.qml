@@ -14,7 +14,7 @@ StyledRect {
     width: Tokens.sizes.notifWidth
     implicitHeight: body.implicitHeight + Tokens.padding.large * 2
     radius: Tokens.rounding.extraLarge
-    color: n.critical ? Colours.t.errorContainer : Colours.t.surfaceContainer
+    color: n.critical ? Colours.t.error_container : Colours.t.surface_container
     border.width: n.critical ? 1 : 0
     border.color: Colours.palette.error
 
@@ -45,7 +45,7 @@ StyledRect {
                 Layout.fillWidth: true
                 text: root.n.appName
                 font.pointSize: Tokens.font.size.small
-                color: Colours.palette.onSurfaceVariant
+                color: Colours.palette.on_surface_variant
                 elide: Text.ElideRight
             }
             StyledText {
@@ -107,7 +107,7 @@ StyledRect {
                     Layout.fillWidth: true
                     visible: root.n.body !== ""
                     text: root.n.body
-                    color: Colours.palette.onSurfaceVariant
+                    color: Colours.palette.on_surface_variant
                     font.pointSize: Tokens.font.size.smaller
                     wrapMode: Text.Wrap
                     // StyledText, NEVER RichText: markup arrives whether or
@@ -134,7 +134,7 @@ StyledRect {
                     required property var modelData
                     required property int index
                     radius: Tokens.rounding.full
-                    color: Colours.t.secondaryContainer
+                    color: Colours.t.secondary_container
                     implicitWidth: label.implicitWidth + Tokens.padding.large
                     implicitHeight: label.implicitHeight + Tokens.padding.small
 
@@ -146,7 +146,7 @@ StyledRect {
                         // raw icon names as button text.
                         text: modelData.text || modelData.identifier
                         font.pointSize: Tokens.font.size.small
-                        color: Colours.palette.onSecondaryContainer
+                        color: Colours.palette.on_secondary_container
                     }
                     StateLayer {
                         radius: Tokens.rounding.full

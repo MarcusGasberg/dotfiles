@@ -6,7 +6,7 @@ import qs.services
 // changing its own colour. Opacity values are the M3 spec's.
 MouseArea {
     id: root
-    property color tint: Colours.palette.onSurface
+    property color tint: Colours.palette.on_surface
     property real radius: Tokens.rounding.full
     anchors.fill: parent
     hoverEnabled: true

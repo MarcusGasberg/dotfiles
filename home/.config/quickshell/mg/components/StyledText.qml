@@ -6,7 +6,7 @@ Text {
     // wanted, and they opt in explicitly with StyledText (never RichText).
     textFormat: Text.PlainText
     renderType: Text.NativeRendering
-    color: Colours.palette.onSurface
+    color: Colours.palette.on_surface
     font.family: Tokens.font.sans
     font.pointSize: Tokens.font.size.normal
     font.variableAxes: ({ "wght": 400 })

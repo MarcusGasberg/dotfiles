@@ -62,9 +62,9 @@ Item {
                     width: parent.isFocused ? root.dot * 0.8 : root.dot
                     height: width
                     radius: width / 2
-                    color: parent.isFocused ? Colours.palette.onPrimary
-                        : (parent.isOccupied ? Colours.palette.onSurfaceVariant
-                                             : Colours.palette.outlineVariant)
+                    color: parent.isFocused ? Colours.palette.on_primary
+                        : (parent.isOccupied ? Colours.palette.on_surface_variant
+                                             : Colours.palette.outline_variant)
                     Behavior on width { Anim { type: Anim.FastEffects } }
                     Behavior on color { CAnim {} }
                 }

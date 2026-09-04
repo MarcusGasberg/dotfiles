@@ -132,7 +132,7 @@ Column {
                 anchors.fill: parent
                 radius: Tokens.rounding.large
                 color: index === root.index
-                    ? Colours.t.primaryContainer : "transparent"
+                    ? Colours.t.primary_container : "transparent"
             }
 
             Row {
@@ -166,7 +166,7 @@ Column {
                         width: root.width - 100
                         elide: Text.ElideRight
                         color: index === root.index
-                            ? Colours.palette.onPrimaryContainer : Colours.palette.onSurface
+                            ? Colours.palette.on_primary_container : Colours.palette.on_surface
                         font.variableAxes: ({ "wght": index === root.index ? 500 : 400 })
                     }
                     StyledText {

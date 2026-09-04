@@ -13,7 +13,7 @@ Column {
     component StatusItem: Item {
         id: item
         property string icon: ""
-        property color tint: Colours.palette.onSurfaceVariant
+        property color tint: Colours.palette.on_surface_variant
         property bool alert: false
         signal activated
         width: Tokens.sizes.barInnerWidth
@@ -51,6 +51,6 @@ Column {
         visible: Batt.available
         icon: Batt.icon
         alert: Batt.low
-        tint: Batt.charging ? Colours.palette.tertiary : Colours.palette.onSurfaceVariant
+        tint: Batt.charging ? Colours.palette.tertiary : Colours.palette.on_surface_variant
     }
 }

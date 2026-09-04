@@ -11,15 +11,15 @@ import qs.components
 // lives in the tooltip.
 Item {
     id: root
-    readonly property HyprlandToplevel top: Hyprland.activeToplevel
-    readonly property string appId: top?.wayland?.appId ?? ""
+    readonly property HyprlandToplevel toplevel: Hyprland.activeToplevel
+    readonly property string appId: toplevel?.wayland?.appId ?? ""
     visible: appId !== ""
     implicitWidth: Tokens.sizes.barInnerWidth
     implicitHeight: Tokens.sizes.barInnerWidth
 
     Pill {
         anchors.fill: parent
-        color: Colours.t.surfaceContainerHigh
+        color: Colours.t.surface_container_high
 
         IconImage {
             anchors.centerIn: parent
